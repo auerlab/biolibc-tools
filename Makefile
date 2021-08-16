@@ -169,12 +169,12 @@ realclean: clean
 install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
-	${INSTALL} -s -m 0555 ${BINS} ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -s -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
 	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
 	    Scripts/fastq-dedup > fastq-dedup
-	${INSTALL} -m 0555 fastq-dedup ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -m 0755 fastq-dedup ${DESTDIR}${PREFIX}/bin
 	${RM} fastq-dedup
-	${INSTALL} -m 0555 Scripts/uniq-seqs.awk \
+	${INSTALL} -m 0755 Scripts/uniq-seqs.awk \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 

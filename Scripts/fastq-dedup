@@ -2,12 +2,12 @@
 
 ##########################################################################
 #   Script description:
-#       Remove duplicates from a fastq file
+#       Remove duplicates from a fastq file.  Per latest benchmarks,
+#       seqkit rmdup --by-sequence is about 3x as fast.  However,
+#       fastq-dedup does not require the entire file in memory as it
+#       uses the Unix sort command, which automatically breaks large
+#       files into chunks for later merging.
 #
-#   Arguments:
-#       
-#   Returns:
-#       
 #   History:
 #   Date        Name        Modification
 #   2021-08-15  Jason Bacon Begin
@@ -79,7 +79,7 @@ case $# in
     ;;
 
 0)
-    fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+    fastq2tsv | $sort -k 2 -t "$(printf '\t')" --buffer-size=50% \
 	| $awk -f $LIBEXEC/uniq-seqs.awk
     ;;
 

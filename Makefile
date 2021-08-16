@@ -65,7 +65,9 @@ PREFIX      ?= ${LOCALBASE}
 # Allow caller to override either MANPREFIX or MANDIR
 MANPREFIX   ?= ${PREFIX}
 MANDIR      ?= ${MANPREFIX}/man
-LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
+# Don't include biolibc-tools because it won't exist outside ${DESTDIR}
+# until after install is complete
+LIBEXECDIR  ?= ${PREFIX}/libexec
 
 ############################################################################
 # Build flags
@@ -166,14 +168,14 @@ realclean: clean
 
 install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
-	    ${DESTDIR}${LIBEXECDIR}
+	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -s -m 0555 ${BINS} ${DESTDIR}${PREFIX}/bin
-	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`|g" \
+	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
 	    Scripts/fastq-dedup > fastq-dedup
 	${INSTALL} -m 0555 fastq-dedup ${DESTDIR}${PREFIX}/bin
 	${RM} fastq-dedup
 	${INSTALL} -m 0555 Scripts/uniq-seqs.awk \
-	    ${DESTDIR}${LIBEXECDIR}
+	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	#${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install

@@ -29,12 +29,7 @@
 *.dylib
 
 # Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+fastq2tsv
 
 # Debug files
 *.dSYM/
@@ -50,3 +45,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Backup files
+.*.bak

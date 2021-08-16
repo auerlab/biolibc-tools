@@ -1,0 +1,4 @@
+fastq2tsv.o: fastq2tsv.c ../local/include/xtend/string.h \
+  ../local/include/biolibc/fastq.h ../local/include/biolibc/biolibc.h
+	${CC} -c ${CFLAGS} fastq2tsv.c
+

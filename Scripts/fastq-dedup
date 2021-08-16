@@ -1,0 +1,90 @@
+#!/bin/sh -e
+
+##########################################################################
+#   Script description:
+#       Remove duplicates from a fastq file
+#
+#   Arguments:
+#       
+#   Returns:
+#       
+#   History:
+#   Date        Name        Modification
+#   2021-08-15  Jason Bacon Begin
+##########################################################################
+
+usage()
+{
+    printf "Usage: $0 [file.[fastq|fq][.xz|.bz2|.gz]]\n"
+    exit 1
+}
+
+
+##########################################################################
+#   Main
+##########################################################################
+
+# GNU sort is the fastest,
+if which gsort > /dev/null; then
+    sort=gsort
+else
+    sort=sort
+fi
+
+# mawk is the fastest implementation (short of awka) per my benchmarks
+if which mawk > /dev/null; then
+    awk=mawk
+else
+    awk=awk
+fi
+
+# Default to ../Scripts for Test/test.sh.  Patch on install.
+LIBEXEC=../Scripts
+
+# Sort and remove lines with the same SEQ.  gsort -u flag does not limit
+# itself to the key field unless -n is also used (unlike BSD sort).
+# So implement the uniq function with an awk filter.
+case $# in
+1)
+    fq=$1
+    uncompressed=${fq%.*z}
+    stem=${uncompressed%.f*q}
+    ext=${fq##*.}
+    case $ext in
+    xz)
+	xzcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	    | $awk -f $LIBEXEC/uniq-seqs.awk
+	;;
+    
+    bz2)
+	bzcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	    | $awk -f $LIBEXEC/uniq-seqs.awk
+	;;
+    
+    gz)
+	zcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	    | $awk -f $LIBEXEC/uniq-seqs.awk
+	;;
+    
+    fastq|fq)
+	fastq2tsv < $fq | $sort -k 2 -t "$(printf '\t')" \
+	    | $awk -f $LIBEXEC/uniq-seqs.awk
+	;;
+    
+    *)
+	usage
+	;;
+    
+    esac
+    ;;
+
+0)
+    fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	| $awk -f $LIBEXEC/uniq-seqs.awk
+    ;;
+
+*)
+    usage
+    ;;
+
+esac

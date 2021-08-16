@@ -176,7 +176,7 @@ install: all
 	${RM} fastq-dedup
 	${INSTALL} -m 0555 Scripts/uniq-seqs.awk \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
-	#${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
+	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install
 	${STRIP} ${DESTDIR}${PREFIX}/bin/${BIN1}

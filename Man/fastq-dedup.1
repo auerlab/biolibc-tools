@@ -20,23 +20,21 @@ filename    FASTQ file optionally compressed with xz, bzip2, or gzip
 
 .SH DESCRIPTION
 
-Remove duplicates from a fastq file using fastq2tsv to reformat
-to tab-separated data for easier sorting, then using Unix sort
-and an awk script to remove adjacent entries with the same
-sequence (column 2 of the TSV).  Per latest benchmarks,
-seqkit rmdup --by-sequence is about 3x as fast.  However,
-fastq-dedup does not require the entire file in memory as it
-uses the Unix sort command, which automatically breaks large
-files into chunks for later merging.
+Remove duplicates from a fastq file by inhaling all records and sorting
+with a libc sort function.
+
+If memory is a limiting factor for your deduplication jobs, see
+fastq-dedup.sh(3), a shell script utilizing the Unix sort command, which
+automatically breaks large files into chunks so they can be sorted within
+available memory.
 
 .SH EXAMPLES
 .nf
 .na
-fastq-dedup file.fastq.xz
+xzcat file.fastq.xz | fastq-dedup > file-uniq.fastq
 .ad
 .fi
 
 .SH SEE ALSO
 
-fastq2tsv
-
+fastq2tsv(1), fastq-dedup.sh(1)

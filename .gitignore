@@ -30,6 +30,7 @@
 
 # Executables
 fastq2tsv
+fastq-dedup
 
 # Debug files
 *.dSYM/

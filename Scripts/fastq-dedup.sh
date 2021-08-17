@@ -12,7 +12,9 @@
 #       seqkit rmdup --by-sequence is about 3x as fast.  However,
 #       fastq-dedup does not require the entire file in memory as it
 #       uses the Unix sort command, which automatically breaks large
-#       files into chunks for later merging.
+#       files into chunks for later merging.  This may make it possible
+#       to deduplicate large files that require too much memory for
+#       seqkit rmdup.
 #       
 #   Arguments:
 #       filename    FASTQ file optionally compressed with xz, bzip2, or gzip

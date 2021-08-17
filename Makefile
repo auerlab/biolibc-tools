@@ -49,7 +49,8 @@
 # Installed targets
 
 BIN1    = fastq2tsv
-BINS    = ${BIN1}
+BIN2    = fastq-dedup
+BINS    = ${BIN1} ${BIN2}
 
 ############################################################################
 # Compile, link, and install options
@@ -124,9 +125,12 @@ STRIP   ?= strip
 
 all:    ${BINS}
 
-# Use static linkage just for portability (DLIB vs DYLIB)
 fastq2tsv: fastq2tsv.c
 	${CC} ${CFLAGS} -o fastq2tsv fastq2tsv.c \
+		 -L${LOCALBASE}/lib -lbiolibc -lxtend ${LDFLAGS}
+
+fastq-dedup: fastq-dedup.c
+	${CC} ${CFLAGS} -o fastq-dedup fastq-dedup.c \
 		 -L${LOCALBASE}/lib -lbiolibc -lxtend ${LDFLAGS}
 
 ############################################################################
@@ -169,11 +173,12 @@ realclean: clean
 install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
-	${INSTALL} -s -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
-	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
-	    Scripts/fastq-dedup > fastq-dedup
+	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
 	${INSTALL} -m 0755 fastq-dedup ${DESTDIR}${PREFIX}/bin
-	${RM} fastq-dedup
+	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
+	    Scripts/fastq-dedup.sh > fastq-dedup.sh
+	${INSTALL} -m 0755 fastq-dedup.sh ${DESTDIR}${PREFIX}/bin
+	${RM} fastq-dedup.sh
 	${INSTALL} -m 0755 Scripts/uniq-seqs.awk \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1

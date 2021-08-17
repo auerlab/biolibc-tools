@@ -1,6 +1,8 @@
 /***************************************************************************
  *  Description:
  *      Remove duplicates from a fastq stream
+ *      This is a naive brute-force method requiring a lot of memory
+ *      TODO: Explore a hash-table approach
  *  
  *  History: 
  *  Date        Name        Modification

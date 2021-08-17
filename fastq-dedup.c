@@ -38,6 +38,7 @@ int     main(int argc, char *argv[])
     array_size = 1024;
     array = xt_malloc(array_size, sizeof(*array));
     records_read = 0;
+    fputs("Reading...\n", stderr);
     do
     {
 	array[records_read] = xt_malloc(1, sizeof(*array[records_read]));
@@ -55,11 +56,13 @@ int     main(int argc, char *argv[])
     }   while ( status != BL_READ_EOF );
     fprintf(stderr, "%zu records read.\n", records_read);
     
+    fputs("Sorting...\n", stderr);
     qsort(array, records_read, sizeof(*array),
 	  (int (*)(const void *, const void *))bl_fastq_seq_cmp);
     
     records_written = 0;
     bl_fastq_write(stdout, array[0], BL_FASTQ_LINE_UNLIMITED);
+    fputs("Writing without duplicates...\n", stderr);
     for (c = 1; c < records_read; ++c)
     {
 	if ( strcmp(BL_FASTQ_SEQ(array[c]), BL_FASTQ_SEQ(array[c-1])) != 0 )
@@ -68,7 +71,7 @@ int     main(int argc, char *argv[])
 	    ++records_written;
 	}
     }
-    printf("%zu records written, %zu removed\n",
+    fprintf(stderr, "%zu records written, %zu removed\n",
 	   records_written, records_read - records_written);
     return EX_OK;
 }

@@ -99,7 +99,7 @@ case $# in
     ;;
 
 0)
-    fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" --buffer-size=50% \
+    fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	| $awk -f $LIBEXEC/uniq-seqs.awk
     ;;
 

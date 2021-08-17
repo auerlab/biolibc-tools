@@ -26,7 +26,7 @@ int     main(int argc, char *argv[])
 	strtr(BL_FASTQ_DESC(&rec), "\t", " ", 0);
 	
 	printf("%s\t%s\t%s\t%s\n", BL_FASTQ_DESC(&rec), BL_FASTQ_SEQ(&rec),
-		"+", BL_FASTQ_QUAL(&rec));
+		BL_FASTQ_PLUS(&rec), BL_FASTQ_QUAL(&rec));
 	
 	++records;
     }

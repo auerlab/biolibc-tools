@@ -49,6 +49,7 @@ if which gsort > /dev/null; then
 else
     sort=sort
 fi
+sort_flags='--buffer-size=25%'
 
 # mawk is the fastest implementation (short of awka) per my benchmarks
 if which mawk > /dev/null; then
@@ -71,22 +72,22 @@ case $# in
     ext=${fq##*.}
     case $ext in
     xz)
-	xzcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	xzcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     bz2)
-	bzcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	bzcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     gz)
-	zcat $fq | fastq2tsv | $sort -k 2 -t "$(printf '\t')" \
+	zcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     fastq|fq)
-	fastq2tsv < $fq | $sort -k 2 -t "$(printf '\t')" \
+	fastq2tsv < $fq | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
@@ -98,7 +99,7 @@ case $# in
     ;;
 
 0)
-    fastq2tsv | $sort -k 2 -t "$(printf '\t')" --buffer-size=50% \
+    fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" --buffer-size=50% \
 	| $awk -f $LIBEXEC/uniq-seqs.awk
     ;;
 

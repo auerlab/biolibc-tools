@@ -1,8 +1,8 @@
 /***************************************************************************
  *  Description:
- *      Remove duplicates from a fastq stream
- *      This is a naive brute-force method requiring a lot of memory
- *      TODO: Explore a hash-table approach
+ *      Remove duplicates from a fastq stream.  This implementation is
+ *      similar to seqkit rmdup, using xxhash to generate hash keys and
+ *      uthash to build a hash table and check for duplicates.
  *  
  *  History: 
  *  Date        Name        Modification
@@ -44,9 +44,8 @@ int     main(int argc, char *argv[])
 	{
 	    HASH_ADD_INT(table, hash, entry);
 	    ++records_written;
+	    bl_fastq_write(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
 	}
-	else
-	    fprintf(stderr, "Duplicate: %s\n", BL_FASTQ_SEQ(&rec));
     }
     fprintf(stderr, "%zu records written, %zu removed\n",
 	   records_written, records_read - records_written);

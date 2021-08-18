@@ -47,7 +47,7 @@ int     main(int argc, char *argv[])
 	    bl_fastq_write(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
 	}
     }
-    fprintf(stderr, "%zu records written, %zu removed\n",
-	   records_written, records_read - records_written);
+    fprintf(stderr, "%zu records read, %zu written, %zu removed\n",
+	   records_read, records_written, records_read - records_written);
     return EX_OK;
 }

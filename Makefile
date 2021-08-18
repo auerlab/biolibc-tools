@@ -57,7 +57,8 @@ BINS    = ${BIN1} ${BIN2}
 
 # Where to find local libraries and headers.  For MacPorts, override
 # with LOCALBASE=/opt/local.
-LOCALBASE   ?= ../local
+LOCALBASE       ?= ../local
+SYSLOCALBASE    ?= /usr/local
 
 # Install in ../local, unless defined by the parent Makefile, the
 # environment, or a command line option such as PREFIX=/opt/local.
@@ -93,11 +94,11 @@ CPP         ?= cpp
 AR          ?= ar
 RANLIB      ?= ranlib
 
-INCLUDES    += -I${LOCALBASE}/include -I/usr/local/include
+INCLUDES    += -I${LOCALBASE}/include -I${SYSLOCALBASE}/include
 CFLAGS      += ${INCLUDES}
 CXXFLAGS    += ${INCLUDES}
 FFLAGS      += ${INCLUDES}
-LDFLAGS     += -L${LOCALBASE}/lib -L/usr/local/lib -lxxhash
+LDFLAGS     += -L${LOCALBASE}/lib -L${SYSLOCALBASE}/lib -lxxhash
 
 ############################################################################
 # Assume first command in PATH.  Override with full pathnames if necessary.

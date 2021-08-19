@@ -8,6 +8,11 @@
  *      uses significantly less memory, but does not filter all the same
  *      records.  seqkit appears to filter the correct number of records
  *      based on agreement with the sort - uniq method.
+ *
+ *      This tool was created primarily to demonstrate how easy it can be
+ *      to write bioinformatics apps in C, given the right libraries.
+ *      In this case, biolibc handles all the FASTQ I/O, xxhash the sequence
+ *      hasing, and uthash the hash table management.
  *  
  *  History: 
  *  Date        Name        Modification

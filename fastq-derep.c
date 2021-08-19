@@ -25,6 +25,10 @@
 #include <xxhash.h>
 #include <biolibc/fastq.h>
 #include <xtend/mem.h>
+#include <xtend/mem.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 typedef struct
 {
@@ -43,6 +47,7 @@ int     main(int argc, char *argv[])
 		    *entry,
 		    *found = NULL;
     XXH64_hash_t    hash;
+    struct rusage   usage;
     
     fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
 	"good idea for the following reasons:\n\n"
@@ -88,5 +93,7 @@ int     main(int argc, char *argv[])
     
     fprintf(stderr, "%zu records read, %zu written, %zu removed\n",
 	   records_read, records_written, records_read - records_written);
+    getrusage(RUSAGE_SELF, &usage);
+    fprintf(stderr, "Maximum RAM used = %lu MiB\n", usage.ru_maxrss / 1024);
     return EX_OK;
 }

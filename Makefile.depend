@@ -1,7 +1,7 @@
-fastq-dedup.o: fastq-dedup.c ../local/include/xtend/string.h \
-  ../local/include/biolibc/fastq.h ../local/include/biolibc/biolibc.h \
-  ../local/include/xtend/mem.h
-	${CC} -c ${CFLAGS} fastq-dedup.c
+fastq-derep.o: fastq-derep.c /usr/local/include/uthash.h \
+  /usr/local/include/xxhash.h ../local/include/biolibc/fastq.h \
+  ../local/include/biolibc/biolibc.h ../local/include/xtend/mem.h
+	${CC} -c ${CFLAGS} fastq-derep.c
 
 fastq2tsv.o: fastq2tsv.c ../local/include/xtend/string.h \
   ../local/include/biolibc/fastq.h ../local/include/biolibc/biolibc.h

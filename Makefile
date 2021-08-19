@@ -49,7 +49,7 @@
 # Installed targets
 
 BIN1    = fastq2tsv
-BIN2    = fastq-dedup
+BIN2    = fastq-derep
 BINS    = ${BIN1} ${BIN2}
 
 ############################################################################
@@ -130,8 +130,8 @@ fastq2tsv: fastq2tsv.c
 	${CC} ${CFLAGS} -o fastq2tsv fastq2tsv.c \
 		 -L${LOCALBASE}/lib -lbiolibc -lxtend ${LDFLAGS}
 
-fastq-dedup: fastq-dedup.c
-	${CC} ${CFLAGS} -o fastq-dedup fastq-dedup.c \
+fastq-derep: fastq-derep.c
+	${CC} -DXXH_INLINE_ALL ${CFLAGS} -o fastq-derep fastq-derep.c \
 		 -L${LOCALBASE}/lib -lbiolibc -lxtend ${LDFLAGS}
 
 ############################################################################
@@ -175,11 +175,11 @@ install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
-	${INSTALL} -m 0755 fastq-dedup ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -m 0755 fastq-derep ${DESTDIR}${PREFIX}/bin
 	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
-	    Scripts/fastq-dedup.sh > fastq-dedup.sh
-	${INSTALL} -m 0755 fastq-dedup.sh ${DESTDIR}${PREFIX}/bin
-	${RM} fastq-dedup.sh
+	    Scripts/fastq-derep.sh > fastq-derep.sh
+	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${PREFIX}/bin
+	${RM} fastq-derep.sh
 	${INSTALL} -m 0755 Scripts/uniq-seqs.awk \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1

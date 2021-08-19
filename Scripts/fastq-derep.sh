@@ -2,18 +2,18 @@
 
 ##########################################################################
 #   Synopsis:
-#       fastq-dedup file.fastq|fq[.xz|.bz2|.gz]
+#       fastq-derep file.fastq|fq[.xz|.bz2|.gz]
 #       
 #   Description:
-#       Remove duplicates from a fastq file using fastq2tsv to reformat
+#       Remove replicates from a fastq file using fastq2tsv to reformat
 #       to tab-separated data for easier sorting, then using Unix sort
 #       and an awk script to remove adjacent entries with the same
 #       sequence (column 2 of the TSV).  Per latest benchmarks,
 #       seqkit rmdup --by-sequence is about 3x as fast.  However,
-#       fastq-dedup does not require the entire file in memory as it
+#       fastq-derep does not require the entire file in memory as it
 #       uses the Unix sort command, which automatically breaks large
 #       files into chunks for later merging.  This may make it possible
-#       to deduplicate large files that require too much memory for
+#       to dereplicate large files that require too much memory for
 #       seqkit rmdup.
 #       
 #   Arguments:
@@ -24,7 +24,7 @@
 #       fasta2tsv, sort, and awk.
 #
 #   Examples:
-#       fastq-dedup file.fastq.xz
+#       fastq-derep file.fastq.xz
 #
 #   See also:
 #       fastq2tsv

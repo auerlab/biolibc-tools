@@ -1,8 +1,8 @@
 /***************************************************************************
  *  Description:
- *      Remove duplicates from a fastq stream.  This implementation is
+ *      Remove replicates from a fastq stream.  This implementation is
  *      similar to seqkit rmdup, using xxhash to generate hash keys and
- *      uthash to build a hash table and check for duplicates.
+ *      uthash to build a hash table and check for replicates.
  *
  *      Currently this implementation has the same runtime as seqkit rmdup,
  *      uses significantly less memory, but does not filter all the same
@@ -44,11 +44,34 @@ int     main(int argc, char *argv[])
 		    *found = NULL;
     XXH64_hash_t    hash;
     
+    fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
+	"good idea for the following reasons:\n\n"
+	"1) It preferentially removes data with no read errors, since\n"
+	"   a read error in one read or the other will cause a mismatch.\n"
+	"   This can be mitigated by removing replicates after alignment\n"
+	"   using samtools, which identifies replicates based on how they\n"
+	"   align rather than by 100% identify.\n\n"
+	"2) There is no way to distinguish between natural and artificial\n"
+	"   replicates at this stage.  Make sure that you either want to\n"
+	"   remove both, or that the benefit of removing artificial\n"
+	"   replicates outweighs the cost of losing natural ones.  This will\n"
+	"   depend on the type of downstream analysis to be done and the\n"
+	"   behavior of the sequencer used.\n\n", stderr);
+    
     records_read = records_written = 0;
     while ( bl_fastq_read(stdin, &rec) == BL_READ_OK )
     {
 	++records_read;
 	hash = XXH64(BL_FASTQ_SEQ(&rec), BL_FASTQ_SEQ_LEN(&rec), seed);
+	
+	/*
+	 *  Note: We assume XXH64 produces no collisions, i.e. only
+	 *  identical sequences will produce the same hash.  If it does,
+	 *  we may end up removing some uniq sequences.  This should be
+	 *  extremely rare, though.  We could use the sequence itself
+	 *  in the hash table, but this would significantly increase
+	 *  memory use (e.g. 100-byte sequences vs 8-byte hashes).
+	 */
 	HASH_FIND(hh, table, &hash, sizeof(hash), found);
 	if ( found == NULL )
 	{

@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Description:
- *      Remove duplicates from a fastq stream
+ *      Remove replicates from a fastq stream
  *  
  *  History: 
  *  Date        Name        Modification

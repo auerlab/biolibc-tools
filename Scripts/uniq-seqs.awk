@@ -22,5 +22,5 @@ BEGIN {
     }
 }
 END {
-    printf("Removed %u sequences.\n", removed) > /dev/stderr;
+    printf("Removed %u records.\n", removed) > "/dev/stderr";
 }

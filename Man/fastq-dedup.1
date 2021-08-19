@@ -7,21 +7,15 @@
 .PP
 .nf 
 .na
-fastq-dedup file.fastq|fq[.xz|.bz2|.gz]
-.ad
-.fi
-
-.SH ARGUMENTS
-.nf
-.na
-filename    FASTQ file optionally compressed with xz, bzip2, or gzip
+fastq-dedup < file.fastq > file-uniq.fastq
+xzcat file.fastq.xz | fastq-dedup > file-uniq.fastq
 .ad
 .fi
 
 .SH DESCRIPTION
 
-Remove duplicates from a fastq file by inhaling all records and sorting
-with a libc sort function.
+Remove duplicates from a fastq file by hashing each sequence and printing
+only records for which the hash has not previously been encountered.
 
 If memory is a limiting factor for your deduplication jobs, see
 fastq-dedup.sh(3), a shell script utilizing the Unix sort command, which

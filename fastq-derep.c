@@ -24,8 +24,8 @@
 #include <uthash.h>
 #include <xxhash.h>
 #include <biolibc/fastq.h>
-#include <xtend/mem.h>
-#include <xtend/mem.h>
+#include <xtend/mem.h>      // xt_malloc
+#include <xtend/time.h>     // xt_tic, xt_toc
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -35,6 +35,7 @@ typedef struct
     XXH64_hash_t    hash;
     UT_hash_handle  hh;
 }   entry_t;
+
 
 int     main(int argc, char *argv[])
 
@@ -48,6 +49,16 @@ int     main(int argc, char *argv[])
 		    *found = NULL;
     XXH64_hash_t    hash;
     struct rusage   usage;
+    struct timeval  start_prog,
+		    start_hash,
+		    end_hash,
+		    start_table_find,
+		    end_table_find,
+		    start_table_add,
+		    end_table_add;
+    unsigned long   hash_time,
+		    table_find_time,
+		    table_add_time;
     
     fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
 	"good idea for the following reasons:\n\n"
@@ -63,11 +74,17 @@ int     main(int argc, char *argv[])
 	"   depend on the type of downstream analysis to be done and the\n"
 	"   behavior of the sequencer used.\n\n", stderr);
     
-    records_read = records_written = 0;
+    xt_tic(&start_prog);
+    records_read = records_written = hash_time = 
+	table_find_time = table_add_time = 0;
     while ( bl_fastq_read(stdin, &rec) == BL_READ_OK )
     {
 	++records_read;
+	// Profiling with gettimeofday() adds about 1% to run time
+	gettimeofday(&start_hash, NULL);
 	hash = XXH64(BL_FASTQ_SEQ(&rec), BL_FASTQ_SEQ_LEN(&rec), seed);
+	gettimeofday(&end_hash, NULL);
+	hash_time += difftimeofday(&end_hash, &start_hash);
 	
 	/*
 	 *  Note: We assume XXH64 produces no collisions, i.e. only
@@ -77,13 +94,20 @@ int     main(int argc, char *argv[])
 	 *  in the hash table, but this would significantly increase
 	 *  memory use (e.g. 100-byte sequences vs 8-byte hashes).
 	 */
+	
+	gettimeofday(&start_table_find, NULL);
 	HASH_FIND(hh, table, &hash, sizeof(hash), found);
+	gettimeofday(&end_table_find, NULL);
+	table_find_time += difftimeofday(&end_table_find, &start_table_find);
 	if ( found == NULL )
 	{
 	    // Record key for comparison to future records
+	    gettimeofday(&start_table_add, NULL);
 	    entry = xt_malloc(1, sizeof(entry_t));
 	    entry->hash = hash;
 	    HASH_ADD(hh, table, hash, sizeof(entry->hash), entry);
+	    gettimeofday(&end_table_add, NULL);
+	    table_add_time += difftimeofday(&end_table_add, &start_table_add);
 	    
 	    // Output record
 	    bl_fastq_write(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
@@ -93,7 +117,15 @@ int     main(int argc, char *argv[])
     
     fprintf(stderr, "%zu records read, %zu written, %zu removed\n",
 	   records_read, records_written, records_read - records_written);
+    xt_toc(stderr, "Elapsed time     = ", &start_prog);
     getrusage(RUSAGE_SELF, &usage);
-    fprintf(stderr, "Maximum RAM used = %lu MiB\n", usage.ru_maxrss / 1024);
+    fprintf(stderr, "User time        = %10lu microseconds\n",
+	    usage.ru_utime.tv_sec * 1000000 + usage.ru_utime.tv_usec);
+    fprintf(stderr, "Sys time         = %10lu microseconds\n",
+	    usage.ru_stime.tv_sec * 1000000 + usage.ru_stime.tv_usec);
+    fprintf(stderr, "xxHash encode    = %10lu microseconds\n", hash_time);
+    fprintf(stderr, "uthash find      = %10lu microseconds\n", table_find_time);
+    fprintf(stderr, "uthash add       = %10lu microseconds\n", table_add_time);
+    fprintf(stderr, "Maximum RAM used = %10lu MiB\n", usage.ru_maxrss / 1024);
     return EX_OK;
 }

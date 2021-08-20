@@ -98,7 +98,8 @@ INCLUDES    += -I${LOCALBASE}/include -I${SYSLOCALBASE}/include
 CFLAGS      += ${INCLUDES}
 CXXFLAGS    += ${INCLUDES}
 FFLAGS      += ${INCLUDES}
-LDFLAGS     += -L${LOCALBASE}/lib -L${SYSLOCALBASE}/lib -lxxhash
+RPATH       ?= -Wl,-rpath,${LOCALBASE}/lib
+LDFLAGS     += -L${LOCALBASE}/lib -L${SYSLOCALBASE}/lib ${RPATH} -lxxhash
 
 ############################################################################
 # Assume first command in PATH.  Override with full pathnames if necessary.

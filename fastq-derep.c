@@ -28,7 +28,6 @@
 #include <xtend/time.h>     // xt_tic, xt_toc
 #include <sys/types.h>
 #include <sys/time.h>
-#include <sys/resource.h>
 
 typedef struct
 {
@@ -48,7 +47,8 @@ int     main(int argc, char *argv[])
 		    *entry,
 		    *found = NULL;
     XXH64_hash_t    hash;
-    struct rusage   usage;
+    struct rusage   start_usage,
+		    end_usage;
     struct timeval  start_prog,
 		    start_hash,
 		    end_hash,
@@ -74,7 +74,7 @@ int     main(int argc, char *argv[])
 	"   depend on the type of downstream analysis to be done and the\n"
 	"   behavior of the sequencer used.\n\n", stderr);
     
-    xt_tic(&start_prog);
+    xt_tic(&start_prog, &start_usage);
     records_read = records_written = hash_time = 
 	table_find_time = table_add_time = 0;
     while ( bl_fastq_read(stdin, &rec) == BL_READ_OK )
@@ -117,15 +117,12 @@ int     main(int argc, char *argv[])
     
     fprintf(stderr, "%zu records read, %zu written, %zu removed\n",
 	   records_read, records_written, records_read - records_written);
-    xt_toc(stderr, "Elapsed time     = ", &start_prog);
-    getrusage(RUSAGE_SELF, &usage);
-    fprintf(stderr, "User time        = %10lu microseconds\n",
-	    usage.ru_utime.tv_sec * 1000000 + usage.ru_utime.tv_usec);
-    fprintf(stderr, "Sys time         = %10lu microseconds\n",
-	    usage.ru_stime.tv_sec * 1000000 + usage.ru_stime.tv_usec);
+    xt_toc(stderr, NULL, &start_prog, &start_usage);
     fprintf(stderr, "xxHash encode    = %10lu microseconds\n", hash_time);
     fprintf(stderr, "uthash find      = %10lu microseconds\n", table_find_time);
     fprintf(stderr, "uthash add       = %10lu microseconds\n", table_add_time);
-    fprintf(stderr, "Maximum RAM used = %10lu MiB\n", usage.ru_maxrss / 1024);
+    getrusage(RUSAGE_SELF, &end_usage);
+    fprintf(stderr, "Maximum RAM used = %10lu MiB\n",
+	    end_usage.ru_maxrss / 1024);
     return EX_OK;
 }

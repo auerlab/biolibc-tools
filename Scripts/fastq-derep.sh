@@ -10,7 +10,7 @@
 #       and an awk script to remove adjacent entries with the same
 #       sequence (column 2 of the TSV).  Per latest benchmarks,
 #       seqkit rmdup --by-sequence is about 3x as fast.  However,
-#       fastq-derep does not require the entire file in memory as it
+#       fastq-derep can process any file with minimal memory as it
 #       uses the Unix sort command, which automatically breaks large
 #       files into chunks for later merging.  This may make it possible
 #       to dereplicate large files that require too much memory for

@@ -48,8 +48,8 @@
 ############################################################################
 # Installed targets
 
-BIN1    = fastq2tsv
-BIN2    = fastq-derep
+BIN1    = fastx2tsv
+BIN2    = fastx-derep
 BINS    = ${BIN1} ${BIN2}
 
 ############################################################################
@@ -127,13 +127,13 @@ STRIP   ?= strip
 
 all:    ${BINS}
 
-fastq2tsv: fastq2tsv.c
-	${CC} ${CFLAGS} -o fastq2tsv fastq2tsv.c \
+fastx2tsv: fastx2tsv.c
+	${CC} ${CFLAGS} -o fastx2tsv fastx2tsv.c \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS}
 
-fastq-derep: fastq-derep.c
-	${CC} -DXXH_INLINE_ALL ${CFLAGS} -o fastq-derep fastq-derep.c \
+fastx-derep: fastx-derep.c
+	${CC} -DXXH_INLINE_ALL ${CFLAGS} -o fastx-derep fastx-derep.c \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS} -lxxhash
 
@@ -178,7 +178,7 @@ install: all
 	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
 	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
 	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
-	${INSTALL} -m 0755 fastq-derep ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -m 0755 fastx-derep ${DESTDIR}${PREFIX}/bin
 	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
 	    Scripts/fastq-derep.sh > fastq-derep.sh
 	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${PREFIX}/bin

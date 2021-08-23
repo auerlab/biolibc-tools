@@ -23,6 +23,7 @@
 #include <sysexits.h>
 #include <uthash.h>
 #include <xxhash.h>
+#include <biolibc/fasta.h>
 #include <biolibc/fastq.h>
 #include <xtend/mem.h>      // xt_malloc
 #include <xtend/time.h>     // xt_tic, xt_toc
@@ -42,7 +43,8 @@ int     main(int argc, char *argv[])
     bl_fastq_t      rec = BL_FASTQ_INIT;
     size_t          records_read,
 		    records_written;
-    int             seed = 0;
+    int             seed = 0,
+		    ch;
     entry_t         *table = NULL,
 		    *entry,
 		    *found = NULL;
@@ -59,6 +61,19 @@ int     main(int argc, char *argv[])
     unsigned long   hash_time,
 		    table_find_time,
 		    table_add_time;
+    int (*read_func)(FILE *,void *);
+    
+    ch = getc(stdin);
+    ungetc(ch, stdin);
+    if ( ch == '>' )
+	read_func = (int (*)(FILE *, void *))bl_fasta_read;
+    else if ( ch == '@' )
+	read_func = (int (*)(FILE *, void *))bl_fastq_read;
+    else
+    {
+	fprintf(stderr, "%s: stdin is neither FASTA nor FASTQ data.\n", argv[0]);
+	return EX_DATAERR;
+    }
     
     fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
 	"good idea for the following reasons:\n\n"

@@ -33,8 +33,12 @@ int     main(int argc, char *argv[])
 	    strtr(BL_FASTQ_DESC(&fasta_rec), "\t", " ", 0);
 	    printf("%s\t%s\n", BL_FASTQ_DESC(&fasta_rec), BL_FASTQ_SEQ(&fasta_rec));
 	    ++records;
+	    /*
+	     *  Start with a fresh allocation for each chromosome to avoid
+	     *  numerous reallocs when a long one follows a short one
+	     */
+	    bl_fasta_free(&fasta_rec);
 	}
-	bl_fasta_free(&fasta_rec);
     }
     else if ( ch == '@' )
     {

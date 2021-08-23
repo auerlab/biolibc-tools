@@ -1,0 +1,54 @@
+.TH fastx2tsv 1
+.SH NAME    \" Section header
+.PP
+
+fastx2tsv - Convert FASTA and FASTQ streams to TSV format
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na 
+fastx2tsv < file.fastq > file.tsv
+fastx2tsv < file.fasta > file.tsv
+.ad
+.fi
+
+.SH "DESCRIPTION"
+.B fastx2tsv
+converts a FASTA or FASTQ stream, possibly containing wrapped sequences and
+phred scores,
+into tab-separated data (TSV) for easier processing using standard tools
+such as awk, cut, etc.  The TSV output of processing can be converted back to
+FASTA or FASTQ format using awk as follows:
+
+.nf
+.na
+awk -F '\\t' '{ printf("%s\\n%s\\n", $1, $2); }' file.tsv \\
+    processed-file.fasta
+awk -F '\\t' '{ printf("%s\\n%s\\n%s\\n%s\\n", $1, $2, $3, $4); }' file.tsv \\
+    processed-file.fastq
+.ad
+.fi
+
+.SH "EXAMPLES"
+.nf
+.na
+# Search sequences only, not description lines, for a pattern
+fastx2tsv < file.fasta | \\
+    awk -F '\\t' '$2 ~ "ATTACGTAAC" { printf("%s\\n%s\\n", $1, $2); }'
+.ad
+.fi
+
+.SH "SEE ALSO"
+fastx-derep
+
+.SH BUGS
+Please report bugs to the author and send patches in unified diff format.
+(man diff for more information)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

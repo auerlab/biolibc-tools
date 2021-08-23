@@ -1,4 +1,4 @@
-.TH fastq-derep 1
+.TH fastx-derep 1
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
@@ -6,14 +6,14 @@
 .PP
 .nf 
 .na
-fastq-derep < file.fastq > file-uniq.fastq
-xzcat file.fastq.xz | fastq-derep > file-uniq.fastq
+fastx-derep < file.fastq > file-uniq.fastq
 .ad
 .fi
 
 .SH DESCRIPTION
 
-Remove replicates from a fastq file by hashing each sequence and printing
+Remove replicates from a FASTA or FASTQ file by hashing each sequence and
+printing
 only records for which the hash has not previously been encountered.
 
 If memory is a limiting factor for your dereplication jobs, see
@@ -24,10 +24,12 @@ available memory.
 .SH EXAMPLES
 .nf
 .na
-xzcat file.fastq.xz | fastq-derep > file-uniq.fastq
+fastx-derep < file.fasta > file-uniq.fasta
+xzcat file.fasta.xz | fastx-derep > file-uniq.fasta
+xzcat file.fastq.xz | fastx-derep > file-uniq.fastq
 .ad
 .fi
 
 .SH SEE ALSO
 
-fastq2tsv(1), fastq-derep.sh(1)
+fastx2tsv(1), fastq-derep.sh(1)

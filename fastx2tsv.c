@@ -23,6 +23,14 @@ int     main(int argc, char *argv[])
     unsigned long   records = 0;
     int             ch;
 
+    /*
+     *  FIXME: This runs about as fast as
+     *  while ( (ch = getc(stdin)) != EOF )
+     *      putc(ch, stdout);
+     *  which is pretty fast, but much slower than seqkit and seqtk.
+     *  Explore other options using faster I/O
+     */
+    
     ch = getc(stdin);
     ungetc(ch, stdin);
     if ( ch == '>' )

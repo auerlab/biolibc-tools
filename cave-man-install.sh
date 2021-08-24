@@ -24,6 +24,12 @@ case $(uname) in
     fi
     LIBDIR=$(realpath $LOCALBASE/lib)
     export LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
+    for pkgsrc in /usr/pkg /opt/pkg; do
+	if [ -e $pkgsrc ]; then
+	    echo "Using $pkgsrc..."
+	    export SYSLOCALBASE=$pkgsrc
+	fi
+    done
     ;;
 
 esac

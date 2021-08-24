@@ -5,9 +5,9 @@
  *      uthash to build a hash table and check for replicates.
  *
  *      Currently this implementation has the same runtime as seqkit rmdup,
- *      uses significantly less memory, but does not filter all the same
- *      records.  seqkit appears to filter the correct number of records
- *      based on agreement with the sort - uniq method.
+ *      and uses about 40% less memory.  It may be possible to improve
+ *      performance further with faster hash table library than uthash
+ *      and faster I/O operations.
  *
  *      This tool was created primarily to demonstrate how easy it can be
  *      to write bioinformatics apps in C, given the right libraries.

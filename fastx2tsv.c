@@ -30,7 +30,10 @@ int     main(int argc, char *argv[])
      *  which is pretty fast, but much slower than seqkit and seqtk.
      *  Explore other options using faster I/O
      */
-    
+
+    fputs("\nBe aware than fastx2tsv replaces TABs with spaces in the description\n"
+	  "so that they won't be interpreted as separators.\n\n", stderr);
+	  
     ch = getc(stdin);
     ungetc(ch, stdin);
     if ( ch == '>' )

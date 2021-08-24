@@ -23,7 +23,6 @@
 #include <sysexits.h>
 #include <uthash.h>
 #include <xxhash.h>
-#include <biolibc/fasta.h>
 #include <biolibc/fastq.h>
 #include <xtend/mem.h>      // xt_malloc
 #include <xtend/time.h>     // xt_tic, xt_toc
@@ -43,8 +42,7 @@ int     main(int argc, char *argv[])
     bl_fastq_t      rec = BL_FASTQ_INIT;
     size_t          records_read,
 		    records_written;
-    int             seed = 0,
-		    ch;
+    int             seed = 0;
     entry_t         *table = NULL,
 		    *entry,
 		    *found = NULL;
@@ -61,26 +59,6 @@ int     main(int argc, char *argv[])
     unsigned long   hash_time,
 		    table_find_time,
 		    table_add_time;
-    int             (*read_func)(FILE *, void *),
-		    (*write_func)(FILE *, void *, unsigned);
-    
-    ch = getc(stdin);
-    ungetc(ch, stdin);
-    if ( ch == '>' )
-    {
-	read_func = (int (*)(FILE *, void *))bl_fasta_read;
-	write_func = (int (*)(FILE *, void *, unsigned))bl_fasta_write;
-    }
-    else if ( ch == '@' )
-    {
-	read_func = (int (*)(FILE *, void *))bl_fastq_read;
-	write_func = (int (*)(FILE *, void *, unsigned))bl_fastq_write;
-    }
-    else
-    {
-	fprintf(stderr, "%s: stdin is neither FASTA nor FASTQ data.\n", argv[0]);
-	return EX_DATAERR;
-    }
     
     fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
 	"good idea for the following reasons:\n\n"
@@ -99,7 +77,7 @@ int     main(int argc, char *argv[])
     xt_tic(&start_prog, &start_usage);
     records_read = records_written = hash_time = 
 	table_find_time = table_add_time = 0;
-    while ( read_func(stdin, &rec) == BL_READ_OK )
+    while ( bl_fastq_read(stdin, &rec) == BL_READ_OK )
     {
 	++records_read;
 	// Profiling with gettimeofday() adds about 1% to run time
@@ -132,7 +110,7 @@ int     main(int argc, char *argv[])
 	    table_add_time += difftimeofday(&end_table_add, &start_table_add);
 	    
 	    // Output record
-	    write_func(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
+	    bl_fastq_write(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
 	    ++records_written;
 	}
     }

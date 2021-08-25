@@ -23,7 +23,7 @@
 #include <sysexits.h>
 #include <uthash.h>
 #include <xxhash.h>
-#include <biolibc/fastq.h>
+#include <biolibc/fastx.h>
 #include <xtend/mem.h>      // xt_malloc
 #include <xtend/time.h>     // xt_tic, xt_toc
 #include <sys/types.h>
@@ -39,7 +39,7 @@ typedef struct
 int     main(int argc, char *argv[])
 
 {
-    bl_fastq_t      rec = BL_FASTQ_INIT;
+    bl_fastx_t      rec = BL_FASTX_INIT;
     size_t          records_read,
 		    records_written;
     int             seed = 0;
@@ -74,15 +74,16 @@ int     main(int argc, char *argv[])
 	"   depend on the type of downstream analysis to be done and the\n"
 	"   behavior of the sequencer used.\n\n", stderr);
     
+    bl_fastx_init(stdin, &rec);
     xt_tic(&start_prog, &start_usage);
     records_read = records_written = hash_time = 
 	table_find_time = table_add_time = 0;
-    while ( bl_fastq_read(stdin, &rec) == BL_READ_OK )
+    while ( bl_fastx_read(stdin, &rec) == BL_READ_OK )
     {
 	++records_read;
 	// Profiling with gettimeofday() adds about 1% to run time
 	gettimeofday(&start_hash, NULL);
-	hash = XXH64(BL_FASTQ_SEQ(&rec), BL_FASTQ_SEQ_LEN(&rec), seed);
+	hash = XXH64(bl_fastx_seq(&rec), bl_fastx_seq_len(&rec), seed);
 	gettimeofday(&end_hash, NULL);
 	hash_time += difftimeofday(&end_hash, &start_hash);
 	
@@ -110,7 +111,7 @@ int     main(int argc, char *argv[])
 	    table_add_time += difftimeofday(&end_table_add, &start_table_add);
 	    
 	    // Output record
-	    bl_fastq_write(stdout, &rec, BL_FASTQ_LINE_UNLIMITED);
+	    bl_fastx_write(stdout, &rec, BL_FASTX_LINE_UNLIMITED);
 	    ++records_written;
 	}
     }

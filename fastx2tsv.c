@@ -11,17 +11,14 @@
 #include <sysexits.h>
 #include <string.h>
 #include <xtend/string.h>
-#include <biolibc/fasta.h>
-#include <biolibc/fastq.h>
+#include <biolibc/fastx.h>
 #include <biolibc/biolibc.h>
 
 int     main(int argc, char *argv[])
 
 {
-    bl_fasta_t      fasta_rec = BL_FASTA_INIT;
-    bl_fastq_t      fastq_rec = BL_FASTQ_INIT;
+    bl_fastx_t      rec = BL_FASTX_INIT;
     unsigned long   records = 0;
-    int             ch;
 
     /*
      *  FIXME: This runs about as fast as
@@ -33,41 +30,27 @@ int     main(int argc, char *argv[])
 
     fputs("\nBe aware than fastx2tsv replaces TABs with spaces in the description\n"
 	  "so that they won't be interpreted as separators.\n\n", stderr);
-	  
-    ch = getc(stdin);
-    ungetc(ch, stdin);
-    if ( ch == '>' )
+
+    bl_fastx_init(stdin, &rec);
+    while ( bl_fastx_read(stdin, &rec) != BL_READ_EOF )
     {
-	while ( bl_fasta_read(stdin, &fasta_rec) != BL_READ_EOF )
+	// Replace TABs in description to avoid interpretation as separators
+	strtr(bl_fastx_desc(&rec), "\t", " ", 0);
+	switch(BL_FASTX_FORMAT(&rec))
 	{
-	    // Replace TABs in description to avoid interpretation as separators
-	    strtr(BL_FASTQ_DESC(&fasta_rec), "\t", " ", 0);
-	    printf("%s\t%s\n", BL_FASTQ_DESC(&fasta_rec), BL_FASTQ_SEQ(&fasta_rec));
-	    ++records;
-	    /*
-	     *  Start with a fresh allocation for each chromosome to avoid
-	     *  numerous reallocs when a long one follows a short one
-	     */
-	    bl_fasta_free(&fasta_rec);
+	    case    BL_FASTX_FORMAT_FASTA:
+		printf("%s\t%s\n",
+			bl_fastx_desc(&rec), bl_fastx_seq(&rec));
+			break;
+	    case    BL_FASTX_FORMAT_FASTQ:
+		printf("%s\t%s\t%s\t%s\n",
+			bl_fastx_desc(&rec), bl_fastx_seq(&rec),
+			bl_fastx_plus(&rec), bl_fastx_qual(&rec));
+			break;
 	}
+	++records;
     }
-    else if ( ch == '@' )
-    {
-	while ( bl_fastq_read(stdin, &fastq_rec) != BL_READ_EOF )
-	{
-	    // Replace TABs in description to avoid interpretation as separators
-	    strtr(BL_FASTQ_DESC(&fastq_rec), "\t", " ", 0);
-	    printf("%s\t%s\t%s\t%s\n", BL_FASTQ_DESC(&fastq_rec), BL_FASTQ_SEQ(&fastq_rec),
-		    BL_FASTQ_PLUS(&fastq_rec), BL_FASTQ_QUAL(&fastq_rec));
-	    ++records;
-	}
-	bl_fastq_free(&fastq_rec);
-    }
-    else
-    {
-	fputs("stdin is neither a FASTA nor a FASTQ file.\n", stderr);
-	return EX_DATAERR;
-    }
+    bl_fastx_free(&rec);
     fprintf(stderr, "%lu records processed.\n", records);
     return EX_OK;
 }

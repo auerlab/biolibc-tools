@@ -29,8 +29,8 @@
 *.dylib
 
 # Executables
-fastq2tsv
-fastq-dedup
+fastx2tsv
+fastx-dedup
 
 # Debug files
 *.dSYM/

@@ -13,7 +13,7 @@ cd ..
 cd Test
 export PATH=..:$PATH
 
-printf "\n===\nTesting fastq2tsv and fastq-derep.sh...\n"
+printf "\n===\nTesting fastx2tsv and fastq-derep.sh...\n"
 ../Scripts/fastq-derep.sh test.fastq > temp.fastq
 if diff correct-uniq.fastq temp.fastq; then
     printf "No differences found, test passed.\n"
@@ -23,8 +23,8 @@ else
     printf "Check temp.fastq.\n"
 fi
 
-printf "\n===\nTesting fastq-derep...\n"
-../fastq-derep < test.fastq | ../fastq2tsv | sort -k 2 \
+printf "\n===\nTesting fastx-derep...\n"
+../fastx-derep < test.fastq | ../fastx2tsv | sort -k 2 \
     | awk -F '\t' '{ printf("%s\n%s\n%s\n%s\n", $1, $2, $3, $4) }' > temp.fastq
 if diff correct-uniq.fastq temp.fastq; then
     printf "No differences found, test passed.\n"

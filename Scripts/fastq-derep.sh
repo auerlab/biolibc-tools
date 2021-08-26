@@ -5,7 +5,7 @@
 #       fastq-derep file.fastq|fq[.xz|.bz2|.gz]
 #       
 #   Description:
-#       Remove replicates from a fastq file using fastq2tsv to reformat
+#       Remove replicates from a fastq file using fastx2tsv to reformat
 #       to tab-separated data for easier sorting, then using Unix sort
 #       and an awk script to remove adjacent entries with the same
 #       sequence (column 2 of the TSV).  Per latest benchmarks,
@@ -21,13 +21,13 @@
 #       
 #   Returns:
 #       Exit status of pipe consisting of optionally a decompressor,
-#       fasta2tsv, sort, and awk.
+#       fastx2tsv, sort, and awk.
 #
 #   Examples:
 #       fastq-derep file.fastq.xz
 #
 #   See also:
-#       fastq2tsv
+#       fastx2tsv
 #       
 #   History:
 #   Date        Name        Modification
@@ -74,22 +74,22 @@ case $# in
     ext=${fq##*.}
     case $ext in
     xz)
-	xzcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
+	xzcat $fq | fastx2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     bz2)
-	bzcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
+	bzcat $fq | fastx2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     gz)
-	zcat $fq | fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
+	zcat $fq | fastx2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
     fastq|fq)
-	fastq2tsv < $fq | $sort $sort_flags -k 2 -t "$(printf '\t')" \
+	fastx2tsv < $fq | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	    | $awk -f $LIBEXEC/uniq-seqs.awk
 	;;
     
@@ -101,7 +101,7 @@ case $# in
     ;;
 
 0)
-    fastq2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
+    fastx2tsv | $sort $sort_flags -k 2 -t "$(printf '\t')" \
 	| $awk -f $LIBEXEC/uniq-seqs.awk
     ;;
 

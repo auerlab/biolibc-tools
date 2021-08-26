@@ -59,6 +59,7 @@ int     main(int argc, char *argv[])
     unsigned long   hash_time,
 		    table_find_time,
 		    table_add_time;
+    int             status;
     
     fputs("\nRemoving replicate sequences from a FASTQ file may not be a\n"
 	"good idea for the following reasons:\n\n"
@@ -78,8 +79,9 @@ int     main(int argc, char *argv[])
     xt_tic(&start_prog, &start_usage);
     records_read = records_written = hash_time = 
 	table_find_time = table_add_time = 0;
-    while ( bl_fastx_read(stdin, &rec) == BL_READ_OK )
+    while ( (status = bl_fastx_read(stdin, &rec)) == BL_READ_OK )
     {
+	//fputs(bl_fastx_desc(&rec), stderr);
 	++records_read;
 	// Profiling with gettimeofday() adds about 1% to run time
 	gettimeofday(&start_hash, NULL);
@@ -116,6 +118,7 @@ int     main(int argc, char *argv[])
 	}
     }
     
+    fprintf(stderr, "bl_fastx_read() status = %d\n", status);
     fprintf(stderr, "%zu records read, %zu written, %zu removed\n",
 	   records_read, records_written, records_read - records_written);
     xt_toc(stderr, NULL, &start_prog, &start_usage);

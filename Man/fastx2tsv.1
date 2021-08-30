@@ -25,19 +25,20 @@ FASTA or FASTQ format using awk as follows:
 
 .nf
 .na
-awk -F '\\t' '{ printf("%s\\n%s\\n", $1, $2); }' file.tsv \\
-    processed-file.fasta
-awk -F '\\t' '{ printf("%s\\n%s\\n%s\\n%s\\n", $1, $2, $3, $4); }' file.tsv \\
-    processed-file.fastq
+awk -F '\\t' '{ printf("%s\\n%s\\n", $1, $2); }' \\
+    file.tsv > file.fasta
+awk -F '\\t' '{ printf("%s\\n%s\\n%s\\n%s\\n", $1, $2, $3, $4); }' \\
+    file.tsv > file.fastq
 .ad
 .fi
 
 .SH "EXAMPLES"
 .nf
 .na
-# Search sequences only, not description lines, for a pattern
+# Filter a FASTA file for sequences containing a pattern
 fastx2tsv < file.fasta | \\
-    awk -F '\\t' '$2 ~ "ATTACGTAAC" { printf("%s\\n%s\\n", $1, $2); }'
+    awk -F '\\t' '$2 ~ "ATTACGTAAC" { printf("%s\\n%s\\n", $1, $2); }' \\
+    > filtered.fasta
 .ad
 .fi
 

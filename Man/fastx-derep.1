@@ -19,7 +19,8 @@ only records for which the hash has not previously been encountered.
 If memory is a limiting factor for your dereplication jobs, see
 fastq-derep.sh(3), a shell script utilizing the Unix sort command, which
 automatically breaks large files into chunks so they can be sorted within
-available memory.
+available memory.  fastq-derep.sh is much slower, but may be able to
+complete tasks where other methods run out of memory.
 
 .SH EXAMPLES
 .nf

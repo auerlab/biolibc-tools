@@ -188,7 +188,9 @@ install: all
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install
-	${STRIP} ${DESTDIR}${PREFIX}/bin/${BIN1}
+	for f in ${BINS}; do \
+	    ${STRIP} ${DESTDIR}${PREFIX}/bin/$${f}; \
+	done
 
 help:
 	@printf "Usage: make [VARIABLE=value ...] all\n\n"

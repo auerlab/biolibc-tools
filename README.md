@@ -5,6 +5,13 @@
 Biolibc-tools is a collection of fast, memory-efficient, simple programs
 based on biolibc for processing biological data.
 
+These are programs too simple to warrant a separate project, because most
+of the functionality is provided by the biolibc library.
+
+They provide for basic data processing tasks in a form that's easier to
+install and use, and often more CPU and memory efficient than analogous
+tools.
+
 ## Building and installing
 
 biolibc-tools is intended to build cleanly in any POSIX environment on
@@ -22,7 +29,11 @@ The Makefile is designed to be friendly to package managers, such as
 [MacPorts](https://www.macports.org/), [pkgsrc](https://pkgsrc.org/), etc.
 End users should install via one of these if at all possible.
 
-I maintain a FreeBSD port and a pkgsrc package.
+I maintain a FreeBSD port and a pkgsrc package, which is sufficient to install
+cleanly on virtually any POSIX platform.  If you would like to see a
+biolibc-tools package in another package manager, please consider creating
+it yourself.  This will be one of the easiest packages in the collection and
+hence a good vehicle to learn how to create packages.
 
 ### Installing biolibc-tools on FreeBSD:
 

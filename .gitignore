@@ -49,3 +49,5 @@ dkms.conf
 
 # Backup files
 .*.bak
+
+README.html

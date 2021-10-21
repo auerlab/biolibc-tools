@@ -1,4 +1,4 @@
-.TH fastx-derep 1
+.TH blt fastx-derep 1
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
@@ -6,7 +6,7 @@
 .PP
 .nf 
 .na
-fastx-derep < file.fastq > file-uniq.fastq
+blt fastx-derep < file.fastq > file-uniq.fastq
 .ad
 .fi
 
@@ -25,9 +25,9 @@ complete tasks where other methods run out of memory.
 .SH EXAMPLES
 .nf
 .na
-fastx-derep < file.fasta > file-uniq.fasta
-xzcat file.fasta.xz | fastx-derep > file-uniq.fasta
-xzcat file.fastq.xz | fastx-derep > file-uniq.fastq
+blt fastx-derep < file.fasta > file-uniq.fasta
+xzcat file.fasta.xz | blt fastx-derep > file-uniq.fasta
+xzcat file.fastq.xz | blt fastx-derep > file-uniq.fastq
 .ad
 .fi
 

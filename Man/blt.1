@@ -1,0 +1,48 @@
+.TH blt 1
+.SH NAME    \" Section header
+.PP
+
+blt - Wrapper for all biolibc-tools subcommands
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt subcommand arguments
+.ad
+.fi
+
+.SH "DESCRIPTION"
+.B blt
+is a wrapper for biolibc-tools subcommands, which are installed in a private
+directory in order to avoid conflicts with other programs bearing the same
+name.
+
+.nf
+.na
+awk -F '\\t' '{ printf("%s\\n%s\\n", $1, $2); }' \\
+    file.tsv > file.fasta
+awk -F '\\t' '{ printf("%s\\n%s\\n%s\\n%s\\n", $1, $2, $3, $4); }' \\
+    file.tsv > file.fastq
+.ad
+.fi
+
+.SH "EXAMPLES"
+.nf
+.na
+blt fastx2tsv < file.fastq > file.tsv
+blt fastx2tsv < file.fasta > file.tsv
+blt fastx-derep < file.fastq > filtered-file.fastq
+blt fastx-derep < file.fasta > filtered-file.fasta
+.ad
+.fi
+
+.SH "SEE ALSO"
+blt-fastx-derep(1), blt-fastx2tsv(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

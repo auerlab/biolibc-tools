@@ -50,7 +50,7 @@
 
 BIN1    = fastx2tsv
 BIN2    = fastx-derep
-BINS    = ${BIN1} ${BIN2}
+BINS    = blt ${BIN1} ${BIN2}
 
 ############################################################################
 # Compile, link, and install options
@@ -69,7 +69,7 @@ MANPREFIX   ?= ${PREFIX}
 MANDIR      ?= ${MANPREFIX}/man
 # Don't include biolibc-tools because it won't exist outside ${DESTDIR}
 # until after install is complete
-LIBEXECDIR  ?= ${PREFIX}/libexec
+LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
 
 ############################################################################
 # Build flags
@@ -82,6 +82,7 @@ LIBEXECDIR  ?= ${PREFIX}/libexec
 # Defaults that should work with GCC and Clang.
 CC          ?= cc
 CFLAGS      ?= -Wall -g -O
+CFLAGS      += -DLIBEXECDIR=\"${LIBEXECDIR}\" -DXXH_INLINE_ALL
 
 # Link command:
 # Use ${FC} to link when mixing C and Fortran
@@ -96,8 +97,6 @@ RANLIB      ?= ranlib
 
 INCLUDES    += -I${LOCALBASE}/include -I${SYSLOCALBASE}/include
 CFLAGS      += ${INCLUDES}
-CXXFLAGS    += ${INCLUDES}
-FFLAGS      += ${INCLUDES}
 RPATH       ?= -Wl,-rpath
 LDFLAGS     += -L${SYSLOCALBASE}/lib
 
@@ -127,13 +126,16 @@ STRIP   ?= strip
 
 all:    ${BINS}
 
-fastx2tsv: fastx2tsv.c
-	${CC} ${CFLAGS} -o fastx2tsv fastx2tsv.c \
+blt:    blt.o
+	${LD} -o blt blt.o
+
+fastx2tsv: fastx2tsv.o
+	${LD} -o fastx2tsv fastx2tsv.o \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS}
 
-fastx-derep: fastx-derep.c
-	${CC} -DXXH_INLINE_ALL ${CFLAGS} -o fastx-derep fastx-derep.c \
+fastx-derep: fastx-derep.o
+	${LD} -o fastx-derep fastx-derep.o \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS} -lxxhash
 
@@ -175,16 +177,19 @@ realclean: clean
 # Install all target files (binaries, libraries, docs, etc.)
 
 install: all
-	${MKDIR} -p ${DESTDIR}${PREFIX}/bin ${DESTDIR}${MANDIR}/man1 \
-	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
-	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${PREFIX}/bin
+	${MKDIR} -p \
+	    ${DESTDIR}${PREFIX}/bin \
+	    ${DESTDIR}${MANDIR}/man1 \
+	    ${DESTDIR}${LIBEXECDIR}
+	${INSTALL} -m 0755 blt ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0755 fastx-derep ${DESTDIR}${PREFIX}/bin
-	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`/biolibc-tools|g" \
+	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`|g" \
 	    Scripts/fastq-derep.sh > fastq-derep.sh
 	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${PREFIX}/bin
 	${RM} fastq-derep.sh
 	${INSTALL} -m 0755 Scripts/uniq-seqs.awk \
-	    ${DESTDIR}${LIBEXECDIR}/biolibc-tools
+	    ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install

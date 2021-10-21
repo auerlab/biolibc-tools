@@ -1,11 +1,15 @@
+blt.o: blt.c
+	${CC} -c ${CFLAGS} blt.c
+
 fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
-  /usr/local/include/xxhash.h ../local/include/biolibc/fasta.h \
-  ../local/include/biolibc/biolibc.h ../local/include/biolibc/fastq.h \
-  ../local/include/xtend/mem.h ../local/include/xtend/time.h
+  /usr/local/include/xxhash.h ../local/include/biolibc/fastx.h \
+  ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
+  ../local/include/biolibc/fastq.h ../local/include/xtend/mem.h \
+  ../local/include/xtend/time.h
 	${CC} -c ${CFLAGS} fastx-derep.c
 
 fastx2tsv.o: fastx2tsv.c ../local/include/xtend/string.h \
-  ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
-  ../local/include/biolibc/fastq.h
+  ../local/include/biolibc/fastx.h ../local/include/biolibc/fasta.h \
+  ../local/include/biolibc/biolibc.h ../local/include/biolibc/fastq.h
 	${CC} -c ${CFLAGS} fastx2tsv.c
 

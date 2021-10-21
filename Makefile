@@ -50,7 +50,7 @@
 
 BIN1    = fastx2tsv
 BIN2    = fastx-derep
-BINS    = blt ${BIN1} ${BIN2}
+BINS    = ${BIN1} ${BIN2}
 
 ############################################################################
 # Compile, link, and install options

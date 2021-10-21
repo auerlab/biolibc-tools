@@ -127,7 +127,7 @@ STRIP   ?= strip
 all:    ${BINS}
 
 blt:    blt.o
-	${LD} -o blt blt.o
+	${LD} -o blt blt.o ${LDFLAGS}
 
 fastx2tsv: fastx2tsv.o
 	${LD} -o fastx2tsv fastx2tsv.o \

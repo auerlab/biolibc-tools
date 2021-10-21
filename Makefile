@@ -183,13 +183,11 @@ install: all
 	    ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0755 blt ${DESTDIR}${PREFIX}/bin
 	${INSTALL} -m 0755 ${BINS} ${DESTDIR}${LIBEXECDIR}
-	${INSTALL} -m 0755 fastx-derep ${DESTDIR}${PREFIX}/bin
 	${SED} -e "s|../Scripts|`realpath ${LIBEXECDIR}`|g" \
 	    Scripts/fastq-derep.sh > fastq-derep.sh
-	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${PREFIX}/bin
+	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${LIBEXECDIR}
 	${RM} fastq-derep.sh
-	${INSTALL} -m 0755 Scripts/uniq-seqs.awk \
-	    ${DESTDIR}${LIBEXECDIR}
+	${INSTALL} -m 0755 Scripts/uniq-seqs.awk ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install

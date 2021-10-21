@@ -124,7 +124,7 @@ STRIP   ?= strip
 
 .PHONY: all depend clean realclean install install-strip help
 
-all:    ${BINS}
+all:    ${BINS} blt
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}

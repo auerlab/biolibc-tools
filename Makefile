@@ -193,8 +193,9 @@ install: all
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install
+	${STRIP} ${DESTDIR}${PREFIX}/bin/blt
 	for f in ${BINS}; do \
-	    ${STRIP} ${DESTDIR}${PREFIX}/bin/$${f}; \
+	    ${STRIP} ${DESTDIR}${LIBEXECDIR}/$${f}; \
 	done
 
 help:

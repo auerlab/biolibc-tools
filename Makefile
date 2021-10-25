@@ -48,7 +48,8 @@
 ############################################################################
 # Installed targets
 
-BIN     = fastx2tsv     # Arbitrary main binary for APE
+# Arbitrary main binary for APE
+BIN     = fastx2tsv
 BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs
 
 ############################################################################

@@ -6,14 +6,16 @@
 int     main(int argc,char *argv[])
 
 {
-    unsigned long   pos;
-    char            codon[4];
-    
-    if ( (pos = next_start_codon(stdin)) != EOF )
+    long    pos = 1,
+	    offset;
+    char    codon[4];
+
+    if ( (offset = next_start_codon(stdin)) != EOF )
     {
-	printf("Start codon at %lu.\n", pos);
-	if ( (pos = next_stop_codon(stdin, codon)) != EOF )
-	    printf("Stop codon %s at %lu.\n", codon, pos);
+	printf("Start codon AUG at %ld (+%ld)\n", pos + offset, offset);
+	pos += offset + 3;
+	if ( (offset = next_stop_codon(stdin, codon)) != EOF )
+	    printf("Stop codon %s at %ld (+%ld)\n", codon, pos + offset, offset);
 	else
 	    puts("No stop codon found.");
     }

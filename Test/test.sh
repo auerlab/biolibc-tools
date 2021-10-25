@@ -34,3 +34,38 @@ else
     printf "Check temp.fastq.\n"
     more temp.fastq
 fi
+
+printf "\n===\nTesting fasta2seq...\n"
+../fasta2seq < test.fasta > temp.seq
+if diff correct.seq temp.seq; then
+    printf "No differences found, test passed.\n"
+    rm -f temp.seq
+else
+    printf "Differences found, test failed.\n"
+    printf "Check temp.seq.\n"
+    more temp.seq
+fi
+
+printf "\n===\nTesting find-orfs...\n"
+../fasta2seq < test.fasta > temp.seq
+../find-orfs < temp.seq > temp.orfs
+rm -f temp.seq
+if diff correct.orfs temp.orfs; then
+    printf "No differences found, test passed.\n"
+    rm -f temp.orfs
+else
+    printf "Differences found, test failed.\n"
+    printf "Check temp.orfs.\n"
+    more temp.orfs
+fi
+
+printf "\n===\nTesting vcf-search...\n"
+../vcf-search chr1 4580 < test.vcf > temp.vcf
+if diff correct.vcf temp.vcf; then
+    printf "No differences found, test passed.\n"
+    rm -f temp.vcf
+else
+    printf "Differences found, test failed.\n"
+    printf "Check temp.vcf.\n"
+    more temp.vcf
+fi

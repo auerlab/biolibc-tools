@@ -1,6 +1,10 @@
 blt.o: blt.c
 	${CC} -c ${CFLAGS} blt.c
 
+fasta2seq.o: fasta2seq.c ../local/include/biolibc/fasta.h \
+  ../local/include/biolibc/biolibc.h
+	${CC} -c ${CFLAGS} fasta2seq.c
+
 fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
   /usr/local/include/xxhash.h ../local/include/biolibc/fastx.h \
   ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
@@ -12,4 +16,12 @@ fastx2tsv.o: fastx2tsv.c ../local/include/xtend/string.h \
   ../local/include/biolibc/fastx.h ../local/include/biolibc/fasta.h \
   ../local/include/biolibc/biolibc.h ../local/include/biolibc/fastq.h
 	${CC} -c ${CFLAGS} fastx2tsv.c
+
+find-orfs.o: find-orfs.c ../local/include/biolibc/translate.h
+	${CC} -c ${CFLAGS} find-orfs.c
+
+vcf-search.o: vcf-search.c ../local/include/xtend/dsv.h \
+  ../local/include/biolibc/vcf.h ../local/include/biolibc/sam.h \
+  ../local/include/biolibc/biolibc.h
+	${CC} -c ${CFLAGS} vcf-search.c
 

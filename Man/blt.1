@@ -36,6 +36,8 @@ blt fastx2tsv < file.fastq > file.tsv
 blt fastx2tsv < file.fasta > file.tsv
 blt fastx-derep < file.fastq > filtered-file.fastq
 blt fastx-derep < file.fasta > filtered-file.fasta
+blt fasta2seq < file.fasta | blt find-orfs
+blt vcf-search chr1 23244 < file.vcf
 .ad
 .fi
 

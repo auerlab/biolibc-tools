@@ -32,6 +32,9 @@
 blt
 fastx2tsv
 fastx-derep
+fasta2seq
+find-orfs
+vcf-search
 
 # Debug files
 *.dSYM/

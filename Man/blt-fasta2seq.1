@@ -1,0 +1,37 @@
+.TH blt fasta2seq 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt fasta2seq < file.fastq > file.seq
+.ad
+.fi
+
+.SH DESCRIPTION
+
+.B blt fasta2seq
+Converts fasta input to a raw sequence stream.  I.e., it removes header
+lines and concatenates the sequence lines.
+
+This is useful to produce raw sequences for tools such as
+.B blt find-orfs.
+
+.SH EXAMPLES
+.nf
+.na
+blt fasta2seq < file.fasta > file.seq
+blt fasta2seq < file.fasta | blt find-orfs
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1), blt-find-orfs(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

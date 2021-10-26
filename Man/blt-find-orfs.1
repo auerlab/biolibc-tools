@@ -1,0 +1,46 @@
+.TH blt find-orfs 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt find-orfs start-potition < file.seq
+blt fasta2seq < file.fasta | blt find-orfs offset
+.ad
+.fi
+
+.SH DESCRIPTION
+
+.B blt find-orfs
+locates start and stop codon sequences within a raw DNA or RNA sequence.
+
+Currently, it reports the location of a start codon and the next stop codon.
+Hence, if a second start codon occurs within an ORF, or a stop codon occurs
+between ORFS, they will not be reported.  These codons may be found by
+specifiying an appropriate start position.
+
+Options to search only for only start codons or only stop codons may be
+added in the future.
+
+The
+.B offset
+argument is 0-based and indicates an offset from the current position
+in the input stream.  I.e. use 0 to start a the beginning of the file.
+
+.SH EXAMPLES
+.nf
+.na
+blt fasta2seq < file.dasta | blt find-orfs 1
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1), blt-fasta2tsv(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

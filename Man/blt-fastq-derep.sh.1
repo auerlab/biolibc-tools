@@ -20,7 +20,8 @@ filename    FASTQ file optionally compressed with xz, bzip2, or gzip
 
 .SH DESCRIPTION
 
-Remove replicates from a fastq file using fastq2tsv to reformat
+.B blt fastq-derep.sh
+removes replicates from a fastq file using fastq2tsv to reformat
 to tab-separated data for easier sorting, then using Unix sort
 and an awk script to remove adjacent entries with the same
 sequence (column 2 of the TSV).  Per latest benchmarks,

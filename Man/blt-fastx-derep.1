@@ -12,7 +12,8 @@ blt fastx-derep < file.fastq > file-uniq.fastq
 
 .SH DESCRIPTION
 
-Remove replicates from a FASTA or FASTQ file by hashing each sequence and
+.B blt fastx-derep
+remove replicates from a FASTA or FASTQ file by hashing each sequence and
 printing
 only records for which the hash has not previously been encountered.
 
@@ -33,7 +34,7 @@ xzcat file.fastq.xz | blt fastx-derep > file-uniq.fastq
 
 .SH SEE ALSO
 
-fastx2tsv(1), fastq-derep.sh(1)
+blt-fastx2tsv(1), blt-fastq-derep.sh(1)
 
 .SH AUTHOR
 .nf

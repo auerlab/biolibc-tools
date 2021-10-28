@@ -1,0 +1,39 @@
+.TH blt extract-seq 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt extract-seq file.gff3 file.fasta feature-type feature-name
+.ad
+.fi
+
+.SH DESCRIPTION
+
+.B blt extract-seq
+searches a GFF3 file for a feature of feature-type (e.g. gene, CDS, exon)
+and if found, extracts the sequence for that feature from the corresponding
+FASTA file.
+
+It is the user's responsibility to ensure that the GFF and FASTA files are
+compatible.  They should be from the same source (NCBI, Ensemble, etc) and
+the same genome build.
+
+.SH EXAMPLES
+.nf
+.na
+blt extract-seq Danio_rerio.GRCz11.104.gff3 \\
+    Danio_rerio.GRCz11.dna.primary_assembly.fa gene jun
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

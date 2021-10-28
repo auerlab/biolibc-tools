@@ -1,12 +1,12 @@
 blt.o: blt.c
 	${CC} -c ${CFLAGS} blt.c
 
+extract-seq.o: extract-seq.c
+	${CC} -c ${CFLAGS} extract-seq.c
+
 fasta2seq.o: fasta2seq.c ../local/include/biolibc/fasta.h \
   ../local/include/biolibc/biolibc.h
 	${CC} -c ${CFLAGS} fasta2seq.c
-
-fasttsv.o: fasttsv.c
-	${CC} -c ${CFLAGS} fasttsv.c
 
 fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
   /usr/local/include/xxhash.h ../local/include/biolibc/fastx.h \

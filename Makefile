@@ -50,7 +50,8 @@
 
 # Arbitrary main binary for APE
 BIN     = fastx2tsv
-BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff-to-bed
+BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff-to-bed \
+	  extract-seq
 
 ############################################################################
 # Compile, link, and install options
@@ -156,6 +157,11 @@ find-orfs: find-orfs.o
 
 gff-to-bed: gff-to-bed.o
 	${LD} -o gff-to-bed gff-to-bed.o \
+		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
+		 -lbiolibc -lxtend ${LDFLAGS}
+
+extract-seq: extract-seq.o
+	${LD} -o extract-seq extract-seq.o \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS}
 

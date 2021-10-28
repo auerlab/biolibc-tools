@@ -5,6 +5,9 @@ fasta2seq.o: fasta2seq.c ../local/include/biolibc/fasta.h \
   ../local/include/biolibc/biolibc.h
 	${CC} -c ${CFLAGS} fasta2seq.c
 
+fasttsv.o: fasttsv.c
+	${CC} -c ${CFLAGS} fasttsv.c
+
 fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
   /usr/local/include/xxhash.h ../local/include/biolibc/fastx.h \
   ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
@@ -19,6 +22,11 @@ fastx2tsv.o: fastx2tsv.c ../local/include/xtend/string.h \
 
 find-orfs.o: find-orfs.c ../local/include/biolibc/translate.h
 	${CC} -c ${CFLAGS} find-orfs.c
+
+gff-to-bed.o: gff-to-bed.c ../local/include/biolibc/gff.h \
+  ../local/include/biolibc/biolibc.h ../local/include/biolibc/bed.h \
+  ../local/include/biolibc/overlap.h
+	${CC} -c ${CFLAGS} gff-to-bed.c
 
 vcf-search.o: vcf-search.c ../local/include/xtend/dsv.h \
   ../local/include/biolibc/vcf.h ../local/include/biolibc/sam.h \

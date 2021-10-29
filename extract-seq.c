@@ -27,9 +27,8 @@ int     main(int argc,char *argv[])
     char        *gff_file,
 		*fasta_file,
 		*feature_type,
-		*feature_name,
+		*search_key,
 		*feature_seq,
-		search_key[KEY_MAX],
 		*gff_chrom,
 		*fasta_chrom;
     int         status;
@@ -37,7 +36,7 @@ int     main(int argc,char *argv[])
 		feature_len;
     unsigned long   start, end;
     bl_gff_t    gff_feature = BL_GFF_INIT;
-    bl_fasta_t  fasta_seq = BL_FASTA_INIT;
+    bl_fasta_t  fasta_rec = BL_FASTA_INIT;
     
     switch(argc)
     {
@@ -45,7 +44,7 @@ int     main(int argc,char *argv[])
 	    gff_file = argv[1];
 	    fasta_file = argv[2];
 	    feature_type = argv[3];
-	    feature_name = argv[4];
+	    search_key = argv[4];
 	    break;
 	
 	default:
@@ -62,10 +61,13 @@ int     main(int argc,char *argv[])
 	return EX_NOINPUT;
     }
     
-    // FIXME: Factor this out to a bl_gff_search() function in biolibc
+    // FIXME: Call this automatically from bl_gff_read() if needed?
     bl_gff_skip_header(gff_stream);
+
+    // FIXME: Factor this out to a bl_gff_search() function in biolibc
+    // FIXME: Collect a list of GFF features, not just one, and check them
+    // all against each FASTA record
     // printf("Searching %s for %s %s\n", argv[1], feature_type, feature_name);
-    snprintf(search_key, KEY_MAX, "Name=%s;", feature_name);
     while ( (status = bl_gff_read(&gff_feature, BL_GFF_FIELD_ALL, gff_stream))
 		== BL_READ_OK )
     {
@@ -94,17 +96,17 @@ int     main(int argc,char *argv[])
 	// printf("%s %lu %lu\n", gff_chrom, start, end);
 	
 	// FIXME: Factor this out to bl_fasta_search() in biolibc
-	while ( bl_fasta_read(fasta_stream, &fasta_seq) == BL_READ_OK )
+	while ( bl_fasta_read(fasta_stream, &fasta_rec) == BL_READ_OK )
 	{
-	    fasta_chrom = BL_FASTA_DESC(&fasta_seq) + 1;    // Skip '>'
+	    fasta_chrom = BL_FASTA_DESC(&fasta_rec) + 1;    // Skip '>'
 	    if ( memcmp(fasta_chrom, gff_chrom, chrom_len) == 0 )
 	    {
-		// puts(BL_FASTA_DESC(&fasta_seq));
-		printf(">%s %s:%zu:%zu:%zu %s %s %s\n", gff_chrom, feature_type,
-			start, end, feature_len, feature_name,
-			gff_file, fasta_file);
+		// puts(BL_FASTA_DESC(&fasta_rec));
+		printf(">%s %zu %zu %s %s %s %s %s\n", gff_chrom, start, end,
+			feature_type, search_key, 
+			BL_GFF_ATTRIBUTES(&gff_feature), gff_file, fasta_file);
 		feature_len = end - start + 1;
-		feature_seq = BL_FASTA_SEQ(&fasta_seq) + start - 1;
+		feature_seq = BL_FASTA_SEQ(&fasta_rec) + start - 1;
 		feature_seq[feature_len] = '\0';
 		puts(feature_seq);
 	    }
@@ -124,7 +126,12 @@ int     main(int argc,char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s file.gff3 file.fasta feature-type feature-name\n", argv[0]);
-    fprintf(stderr, "Example: %s Danio_rerio.GRCz11.104.gff3 Danio_rerio.GRCz11.dna.primary_assembly.fa gene Jun\n", argv[0]);
+    fprintf(stderr, "\nUsage: %s file.gff3 file.fasta feature-type 'search-key'\n", argv[0]);
+    fprintf(stderr, "Search-key is any exact substring of the attributes column in the GFF.\n");
+    fprintf(stderr, "To match a gene name exactly, include ';' in the search key. e.g. 'Name=jun;'\n");
+    fprintf(stderr, "View your GFF file with \"more file.gff3\" to get ideas for search-key.\n");
+    fprintf(stderr, "\nExample:\n\nblt extract-seq Danio_rerio.GRCz11.104.gff3 Danio_rerio.GRCz11.dna.primary_assembly.fa gene 'Name=jun;'\n\n");
+    fprintf(stderr, "Be sure to enclose search-key in hard quotes ('') if it contains any special\n");
+    fprintf(stderr, "characters such as *, ?, ;, etc.\n\n");
     exit(EX_USAGE);
 }

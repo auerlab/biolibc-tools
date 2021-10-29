@@ -1,7 +1,9 @@
 blt.o: blt.c
 	${CC} -c ${CFLAGS} blt.c
 
-extract-seq.o: extract-seq.c
+extract-seq.o: extract-seq.c ../local/include/biolibc/gff.h \
+  ../local/include/biolibc/biolibc.h ../local/include/biolibc/bed.h \
+  ../local/include/biolibc/overlap.h ../local/include/biolibc/fasta.h
 	${CC} -c ${CFLAGS} extract-seq.c
 
 fasta2seq.o: fasta2seq.c ../local/include/biolibc/fasta.h \

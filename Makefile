@@ -128,9 +128,7 @@ STRIP   ?= strip
 all:    ${BINS} blt version.sh
 
 version.sh:
-	test -e .git && \
-	    printf "#!/bin/sh\n\necho `git describe --tags`\n" > version.sh
-	test -e .git && mv version.sh Scripts/version
+	test -e .git && (printf "#!/bin/sh\n\necho `git describe --tags`\n" > version.sh; mv version.sh Scripts/version)
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}

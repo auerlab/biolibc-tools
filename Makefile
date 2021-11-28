@@ -125,7 +125,12 @@ STRIP   ?= strip
 
 .PHONY: all depend clean realclean install install-strip help
 
-all:    ${BINS} blt
+all:    ${BINS} blt version.sh
+
+version.sh:
+	test -e .git && \
+	    printf "#!/bin/sh\n\necho `git describe --tags`\n" > version.sh
+	mv version.sh Scripts/version
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}
@@ -219,6 +224,7 @@ install: all
 	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${LIBEXECDIR}
 	${RM} fastq-derep.sh
 	${INSTALL} -m 0755 Scripts/uniq-seqs.awk ${DESTDIR}${LIBEXECDIR}
+	${INSTALL} -m 0755 Scripts/version ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install

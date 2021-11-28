@@ -1,6 +1,9 @@
 blt.o: blt.c
 	${CC} -c ${CFLAGS} blt.c
 
+chrom-len.o: chrom-len.c
+	${CC} -c ${CFLAGS} chrom-len.c
+
 extract-seq.o: extract-seq.c ../local/include/biolibc/gff.h \
   ../local/include/biolibc/biolibc.h ../local/include/biolibc/bed.h \
   ../local/include/biolibc/overlap.h ../local/include/biolibc/fasta.h
@@ -9,6 +12,9 @@ extract-seq.o: extract-seq.c ../local/include/biolibc/gff.h \
 fasta2seq.o: fasta2seq.c ../local/include/biolibc/fasta.h \
   ../local/include/biolibc/biolibc.h
 	${CC} -c ${CFLAGS} fasta2seq.c
+
+fasttsv.o: fasttsv.c
+	${CC} -c ${CFLAGS} fasttsv.c
 
 fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
   /usr/local/include/xxhash.h ../local/include/biolibc/fastx.h \

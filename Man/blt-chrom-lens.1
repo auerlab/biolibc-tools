@@ -1,0 +1,36 @@
+.TH blt chrom-lens 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt chrom-lens < file.fasta
+.ad
+.fi
+
+.SH DESCRIPTION
+
+.B blt chrom-lens
+Generates TSV (tab separated values) output containing chromosome names
+and lengths as required by kallisto and other tools.  Since the lengths are
+taken directly from the FASTA reference file, this eliminates the need to
+locate and trust other sources of this information.
+
+.SH EXAMPLES
+.nf
+.na
+blt chrom-lens < file.fasta
+xzcat file.fasta.xz | blt chrom-lens
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

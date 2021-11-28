@@ -51,7 +51,7 @@
 # Arbitrary main binary for APE
 BIN     = fastx2tsv
 BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff-to-bed \
-	  extract-seq
+	  extract-seq chrom-lens
 
 ############################################################################
 # Compile, link, and install options
@@ -162,6 +162,11 @@ gff-to-bed: gff-to-bed.o
 
 extract-seq: extract-seq.o
 	${LD} -o extract-seq extract-seq.o \
+		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
+		 -lbiolibc -lxtend ${LDFLAGS}
+
+chrom-lens: chrom-lens.o
+	${LD} -o chrom-lens chrom-lens.o \
 		 -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
 		 -lbiolibc -lxtend ${LDFLAGS}
 

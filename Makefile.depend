@@ -1,8 +1,9 @@
 blt.o: blt.c
 	${CC} -c ${CFLAGS} blt.c
 
-chrom-len.o: chrom-len.c
-	${CC} -c ${CFLAGS} chrom-len.c
+chrom-lens.o: chrom-lens.c ../local/include/biolibc/fasta.h \
+  ../local/include/biolibc/biolibc.h
+	${CC} -c ${CFLAGS} chrom-lens.c
 
 extract-seq.o: extract-seq.c ../local/include/biolibc/gff.h \
   ../local/include/biolibc/biolibc.h ../local/include/biolibc/bed.h \

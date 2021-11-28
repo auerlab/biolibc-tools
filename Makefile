@@ -129,7 +129,7 @@ STRIP   ?= strip
 all:    ${BINS} blt version.txt
 
 version.txt:
-	test -e .git && git describe --tags > version.txt
+	test -e .git && git describe --tags > version.txt || true
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}
@@ -223,7 +223,6 @@ install: all
 	${INSTALL} -m 0755 fastq-derep.sh ${DESTDIR}${LIBEXECDIR}
 	${RM} fastq-derep.sh
 	${INSTALL} -m 0755 Scripts/uniq-seqs.awk ${DESTDIR}${LIBEXECDIR}
-	${INSTALL} -m 0755 Scripts/version ${DESTDIR}${LIBEXECDIR}
 	${INSTALL} -m 0444 Man/* ${DESTDIR}${MANDIR}/man1
 
 install-strip: install

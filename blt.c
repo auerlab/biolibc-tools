@@ -49,7 +49,12 @@ int     main(int argc,char *argv[])
     struct dirent   *dir_entry;
     struct stat     inode;
     
-    if ( argc < 2 )
+    if ( (argc == 2) && (strcmp(argv[1],"--version") == 0) )
+    {
+	printf("%s\n", VERSION);
+	return EX_OK;
+    }
+    else if ( argc < 2 )
     {
 	fprintf(stderr, "Usage: %s subcommand [args]\n", argv[0]);
 	fprintf(stderr, "\nSubcommands:\n\n");

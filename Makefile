@@ -49,7 +49,7 @@
 # Installed targets
 
 # Arbitrary main binary for APE
-BIN     = fastx2tsv
+BIN     = blt
 BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff-to-bed \
 	  extract-seq chrom-lens
 
@@ -84,6 +84,7 @@ LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
 CC          ?= cc
 CFLAGS      ?= -Wall -g -O
 CFLAGS      += -DLIBEXECDIR=\"${LIBEXECDIR}\" -DXXH_INLINE_ALL
+CFLAGS      += -DVERSION=\"`cat version.txt`\"
 
 # Link command:
 # Use ${FC} to link when mixing C and Fortran
@@ -123,12 +124,12 @@ STRIP   ?= strip
 ############################################################################
 # Standard targets required by package managers
 
-.PHONY: all depend clean realclean install install-strip help
+.PHONY: all depend clean realclean install install-strip help version.txt
 
-all:    ${BINS} blt version.sh
+all:    ${BINS} blt version.txt
 
-version.sh:
-	test -e .git && (printf "#!/bin/sh\n\necho `git describe --tags`\n" > version.sh; mv version.sh Scripts/version)
+version.txt:
+	test -e .git && git describe --tags > version.txt
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}

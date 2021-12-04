@@ -11,8 +11,8 @@
 #   2021-07-12  Jason Bacon Begin
 ##########################################################################
 
-# Default to ../local if LOCALBASE is not set
-: ${LOCALBASE:=../local}
+# Default to ../local if PREFIX is not set
+: ${PREFIX:=../local}
 
 # OS-dependent tricks
 # Set rpath to avoid picking up libs installed by package managers in
@@ -22,16 +22,18 @@ case $(uname) in
     if [ -z "$CFLAGS" ]; then
 	export CFLAGS="-Wall -g -O"
     fi
-    LIBDIR=$(realpath $LOCALBASE/lib)
+    LIBDIR=$(realpath $PREFIX/lib)
     export LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
     for pkgsrc in /usr/pkg /opt/pkg; do
 	if [ -e $pkgsrc ]; then
 	    echo "Using $pkgsrc..."
-	    export SYSLOCALBASE=$pkgsrc
+	    export LOCALBASE=$pkgsrc
 	fi
     done
     ;;
 
 esac
 
-make clean install
+make clean
+make depend
+make install

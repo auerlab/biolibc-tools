@@ -51,7 +51,7 @@ int     main(int argc,char *argv[])
     
     if ( (argc == 2) && (strcmp(argv[1],"--version") == 0) )
     {
-	printf("%s\n", VERSION);
+	printf("biolibc-tools %s\n", VERSION);
 	return EX_OK;
     }
     else if ( argc < 2 )

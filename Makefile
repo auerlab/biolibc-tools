@@ -127,7 +127,7 @@ STRIP   ?= strip
 all:    ${BINS} blt version.txt
 
 version.txt:
-	test -e .git && git describe --tags > version.txt || true
+	test -e .git && ./git-version.sh > version.txt || true
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}

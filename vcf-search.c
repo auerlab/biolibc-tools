@@ -23,6 +23,7 @@ int     main(int argc,char *argv[])
     unsigned long   pos;
     int             field_mask = BL_VCF_FIELD_ALL; // BL_VCF_FIELD_CHROM|BL_VCF_FIELD_POS;
     bl_vcf_t        vcf_call;
+    FILE            *vcf_meta_stream;
 
     switch(argc)
     {
@@ -40,7 +41,9 @@ int     main(int argc,char *argv[])
 	    return EX_USAGE;
     }
     
-    bl_vcf_skip_header(stdin);
+    if ( bl_vcf_skip_meta_data(stdin, &vcf_meta_stream) != BL_READ_OK )
+	return EX_DATAERR;
+    // Discard header line (#CHROM ...)
     dsv_skip_rest_of_line(stdin);
     bl_vcf_init(&vcf_call, 1024, 1024, 1024);
     

@@ -45,11 +45,11 @@ int     main(int argc,char *argv[])
     }
     while ( ! feof(stream) )
     {
-	if ( (offset = next_start_codon(stream, codon)) != EOF )
+	if ( (offset = bl_next_start_codon(stream, codon)) != EOF )
 	{
 	    printf("Start codon %s at %ld (+%ld)\n", codon, pos + offset, offset);
 	    pos += offset + 3;
-	    if ( (offset = next_stop_codon(stream, codon)) != EOF )
+	    if ( (offset = bl_next_stop_codon(stream, codon)) != EOF )
 	    {
 		printf("Stop codon %s at %ld (+%ld)\n", codon, pos + offset, offset);
 		pos += offset + 3;

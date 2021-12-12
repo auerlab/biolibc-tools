@@ -80,7 +80,7 @@ LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
 CC          ?= cc
 CFLAGS      ?= -Wall -g -O
 CFLAGS      += -DLIBEXECDIR=\"${LIBEXECDIR}\" -DXXH_INLINE_ALL
-CFLAGS      += -DVERSION=\"`cat version.txt`\"
+CFLAGS      += -DVERSION=\"`./version.sh`\"
 
 # Link command:
 # Use ${FC} to link when mixing C and Fortran
@@ -122,12 +122,9 @@ STRIP   ?= strip
 ############################################################################
 # Standard targets required by package managers
 
-.PHONY: all depend clean realclean install install-strip help version.txt
+.PHONY: all depend clean realclean install install-strip help
 
-all:    ${BINS} blt version.txt
-
-version.txt:
-	test -e .git && ./git-version.sh > version.txt || true
+all:    ${BINS} blt
 
 blt:    blt.o
 	${LD} -o blt blt.o ${LDFLAGS}

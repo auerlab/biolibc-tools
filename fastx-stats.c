@@ -81,6 +81,8 @@ int     fastx_stats(char *filename)
     if ( fastx_stream != stdin )
 	xt_fclose(fastx_stream);
     bl_fastx_free(&rec);
+    
+    printf("\nFilename:   %s\n", filename);
     printf("Sequences:  %lu\n", records);
     printf("Bases:      %lu\n", bases);
     printf("Avg length: %lu\n", bases / records);

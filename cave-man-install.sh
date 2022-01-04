@@ -24,7 +24,7 @@ case $(uname) in
     fi
     LIBDIR=$(realpath $PREFIX/lib)
     export LDFLAGS="-L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
-    for pkgsrc in /usr/pkg /opt/pkg; do
+    for pkgsrc in /usr/pkg /opt/pkg ~/Pkgsrc/pkg; do
 	if [ -e $pkgsrc ]; then
 	    echo "Using $pkgsrc..."
 	    export LOCALBASE=$pkgsrc

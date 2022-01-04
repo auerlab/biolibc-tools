@@ -50,7 +50,7 @@
 
 # Arbitrary main binary for APE
 BIN     = blt
-BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff-to-bed \
+BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff2bed \
 	  extract-seq chrom-lens fastx-stats
 
 ############################################################################
@@ -144,8 +144,8 @@ fasta2seq: fasta2seq.o
 find-orfs: find-orfs.o
 	${LD} -o find-orfs find-orfs.o ${LDFLAGS}
 
-gff-to-bed: gff-to-bed.o
-	${LD} -o gff-to-bed gff-to-bed.o ${LDFLAGS}
+gff2bed: gff2bed.o
+	${LD} -o gff2bed gff2bed.o ${LDFLAGS}
 
 extract-seq: extract-seq.o
 	${LD} -o extract-seq extract-seq.o ${LDFLAGS}

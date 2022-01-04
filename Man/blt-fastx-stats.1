@@ -1,0 +1,41 @@
+.TH blt fastx2tsv 1
+.SH NAME    \" Section header
+.PP
+
+blt fastx-stats - Report basics statistics on a FASTA/FASTQ file
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na 
+blt fastx-stats file.fasta
+blt fastx-stats file.fasta.xz
+prog | blt fastx-stats
+.ad
+.fi
+
+.SH "DESCRIPTION"
+.B blt fastx-stats
+reports basic statistics such as number of sequences, sequence lengths,
+base content, etc. on a FASTA or FASTQ file.
+
+Input files may be compressed with standard compression algorithms supported
+by xt_fopen(3), such as gzip, bzip2, and xz.
+
+.SH "EXAMPLES"
+.nf
+.na
+# Filter a FASTA file for sequences containing a pattern
+blt fastx-stats file.fasta.xz
+.ad
+.fi
+
+.SH "SEE ALSO"
+blt-fastx-derep(1), blt-fastq-derep.sh(1), blt-fastx2tsv(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

@@ -10,6 +10,7 @@ blt - Wrapper for all biolibc-tools subcommands
 .PP
 .nf 
 .na
+blt
 blt subcommand arguments
 .ad
 .fi
@@ -19,6 +20,11 @@ blt subcommand arguments
 is a wrapper for biolibc-tools subcommands, which are installed in a private
 directory in order to avoid conflicts with other programs bearing the same
 name.
+
+Running
+.B blt
+with no arguments lists available subcommands.  For each subcommands there
+is a man page under the name blt-<subcommand>.
 
 .nf
 .na
@@ -33,18 +39,24 @@ awk -F '\\t' '{ printf("%s\\n%s\\n%s\\n%s\\n", $1, $2, $3, $4); }' \\
 .nf
 .na
 blt version
-blt fastx2tsv < file.fastq > file.tsv
-blt fastx2tsv < file.fasta > file.tsv
+blt chrom-lens < file.fasta
+blt extract-seq file.gff3 file.fasta feature-type 'search-key'
+blt fasta2seq < file.fasta > file.seq
 blt fastx-derep < file.fastq > filtered-file.fastq
 blt fastx-derep < file.fasta > filtered-file.fasta
-blt fasta2seq < file.fasta | blt find-orfs
+blt fastx-stats file1.fastq file2.fasta.xz
+blt fastx2tsv < file.fastq > file.tsv
+blt fastx2tsv < file.fasta > file.tsv
+blt fasta2seq < file.fasta | blt find-orfs 0
+blt gff2bed < file.gff > file.bed
 blt vcf-search chr1 23244 < file.vcf
-blt chrom-lens < file.fasta
 .ad
 .fi
 
 .SH "SEE ALSO"
-blt-<subcommand>(1), e.g. blt-fastx2tsv(1), blt-fastx-derep(1), etc.
+blt-chrom-lens(1), blt-extract-seq(1), blt-fasta2seq(1), blt-fastx-derep(1),
+blt-fastx-stats(1), blt-fastx2tsv(1), blt-fasta2seq(1), blt-find-orfs(1),
+blt-gff2bed(1), blt-vcf-search(1)
 
 .SH AUTHOR
 .nf

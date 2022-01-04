@@ -18,7 +18,31 @@
 #include <biolibc/fastx.h>
 #include <biolibc/biolibc.h>
 
+int     fastx_stats(char *filename);
+
 int     main(int argc, char *argv[])
+
+{
+    int     arg,
+	    status;
+
+    switch(argc)
+    {
+	case 1:
+	    return fastx_stats("-");
+	    break;
+	
+	default:
+	    for (arg = 1; arg < argc; ++arg)
+		if ( (status = fastx_stats(argv[arg])) != EX_OK )
+		    return status;
+    }
+	
+    return EX_OK;
+}
+
+
+int     fastx_stats(char *filename)
 
 {
     bl_fastx_t      rec = BL_FASTX_INIT;
@@ -31,28 +55,16 @@ int     main(int argc, char *argv[])
     FILE            *fastx_stream;
     char            *p;
 
-    memset(counts, 0, 26 * sizeof(*counts));
-    switch(argc)
+    if ( strcmp(filename, "-") == 0 )
+	fastx_stream = stdin;
+    else if ( (fastx_stream = xt_fopen(filename, "r")) == NULL )
     {
-	case 1:
-	    fastx_stream = stdin;
-	    break;
-	
-	case 2:
-	    if ( (fastx_stream = xt_fopen(argv[1], "r")) == NULL )
-	    {
-		fprintf(stderr, "%s: Cannot open %s: %s\n", argv[0],
-			argv[1], strerror(errno));
-		return EX_NOINPUT;
-	    }
-	    break;
-	
-	default:
-	    fprintf(stderr, "Usage: %s [file.fast(aq)[.gz|.bz2|.xz]]\n",
-		    argv[0]);
-	    return EX_USAGE;
+	fprintf(stderr, "fastx-stats: Cannot open %s: %s\n",
+		filename, strerror(errno));
+	return EX_NOINPUT;
     }
-	
+
+    memset(counts, 0, 26 * sizeof(*counts));
     bl_fastx_init(fastx_stream, &rec);
     while ( bl_fastx_read(fastx_stream, &rec) != BL_READ_EOF )
     {
@@ -66,7 +78,7 @@ int     main(int argc, char *argv[])
 	for (p = bl_fastx_seq(&rec); *p != '\0'; ++p)
 	    ++counts[tolower(*p) - 'a'];
     }
-    if ( argc == 1 )
+    if ( fastx_stream != stdin )
 	xt_fclose(fastx_stream);
     bl_fastx_free(&rec);
     printf("Sequences:  %lu\n", records);

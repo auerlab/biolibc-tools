@@ -54,6 +54,7 @@ int     fastx_stats(char *filename)
 		    counts[26];
     FILE            *fastx_stream;
     char            *p;
+    int             status;
 
     if ( strcmp(filename, "-") == 0 )
 	fastx_stream = stdin;
@@ -66,7 +67,7 @@ int     fastx_stats(char *filename)
 
     memset(counts, 0, 26 * sizeof(*counts));
     bl_fastx_init(fastx_stream, &rec);
-    while ( bl_fastx_read(fastx_stream, &rec) != BL_READ_EOF )
+    while ( (status = bl_fastx_read(fastx_stream, &rec)) == BL_READ_OK )
     {
 	++records;
 	len = bl_fastx_seq_len(&rec);
@@ -81,6 +82,12 @@ int     fastx_stats(char *filename)
     if ( fastx_stream != stdin )
 	xt_fclose(fastx_stream);
     bl_fastx_free(&rec);
+    
+    if ( status != BL_READ_EOF )
+    {
+	fprintf(stderr, "Error reading file: %s\n", strerror(errno));
+	return EX_DATAERR;
+    }
     
     printf("\nFilename:   %s\n", filename);
     printf("Sequences:  %lu\n", records);

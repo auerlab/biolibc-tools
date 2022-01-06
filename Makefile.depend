@@ -21,6 +21,18 @@ fastx-derep.o: fastx-derep.c /usr/local/include/uthash.h \
   ../local/include/xtend/time.h
 	${CC} -c ${CFLAGS} fastx-derep.c
 
+fastx-diff.o: fastx-diff.c ../local/include/xtend/string.h \
+  ../local/include/xtend/file.h ../local/include/biolibc/fastx.h \
+  ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
+  ../local/include/biolibc/fastq.h
+	${CC} -c ${CFLAGS} fastx-diff.c
+
+fastx-stats.o: fastx-stats.c ../local/include/xtend/string.h \
+  ../local/include/xtend/file.h ../local/include/biolibc/fastx.h \
+  ../local/include/biolibc/fasta.h ../local/include/biolibc/biolibc.h \
+  ../local/include/biolibc/fastq.h
+	${CC} -c ${CFLAGS} fastx-stats.c
+
 fastx2tsv.o: fastx2tsv.c ../local/include/xtend/string.h \
   ../local/include/biolibc/fastx.h ../local/include/biolibc/fasta.h \
   ../local/include/biolibc/biolibc.h ../local/include/biolibc/fastq.h
@@ -29,10 +41,10 @@ fastx2tsv.o: fastx2tsv.c ../local/include/xtend/string.h \
 find-orfs.o: find-orfs.c ../local/include/biolibc/translate.h
 	${CC} -c ${CFLAGS} find-orfs.c
 
-gff-to-bed.o: gff-to-bed.c ../local/include/biolibc/gff.h \
+gff2bed.o: gff2bed.c ../local/include/biolibc/gff.h \
   ../local/include/biolibc/biolibc.h ../local/include/biolibc/bed.h \
   ../local/include/biolibc/overlap.h
-	${CC} -c ${CFLAGS} gff-to-bed.c
+	${CC} -c ${CFLAGS} gff2bed.c
 
 vcf-search.o: vcf-search.c ../local/include/xtend/dsv.h \
   ../local/include/biolibc/vcf.h ../local/include/biolibc/sam.h \

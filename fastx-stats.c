@@ -66,8 +66,8 @@ int     fastx_stats(char *filename)
     }
 
     memset(counts, 0, 26 * sizeof(*counts));
-    bl_fastx_init(fastx_stream, &rec);
-    while ( (status = bl_fastx_read(fastx_stream, &rec)) == BL_READ_OK )
+    bl_fastx_init(&rec, fastx_stream);
+    while ( (status = bl_fastx_read(&rec, fastx_stream)) == BL_READ_OK )
     {
 	++records;
 	len = bl_fastx_seq_len(&rec);

@@ -31,8 +31,8 @@ int     main(int argc, char *argv[])
     fputs("\nBe aware than fastx2tsv replaces TABs with spaces in the description\n"
 	  "so that they won't be interpreted as separators.\n\n", stderr);
 
-    bl_fastx_init(stdin, &rec);
-    while ( bl_fastx_read(stdin, &rec) != BL_READ_EOF )
+    bl_fastx_init(&rec, stdin);
+    while ( bl_fastx_read(&rec, stdin) != BL_READ_EOF )
     {
 	// Replace TABs in description to avoid interpretation as separators
 	strtr(bl_fastx_desc(&rec), "\t", " ", 0);

@@ -75,11 +75,11 @@ int     main(int argc, char *argv[])
 	"   depend on the type of downstream analysis to be done and the\n"
 	"   behavior of the sequencer used.\n\n", stderr);
     
-    bl_fastx_init(stdin, &rec);
+    bl_fastx_init(&rec, stdin);
     xt_tic(&start_prog, &start_usage);
     records_read = records_written = hash_time = 
 	table_find_time = table_add_time = 0;
-    while ( (status = bl_fastx_read(stdin, &rec)) == BL_READ_OK )
+    while ( (status = bl_fastx_read(&rec, stdin)) == BL_READ_OK )
     {
 	//fputs(bl_fastx_desc(&rec), stderr);
 	++records_read;
@@ -113,7 +113,7 @@ int     main(int argc, char *argv[])
 	    table_add_time += difftimeofday(&end_table_add, &start_table_add);
 	    
 	    // Output record
-	    bl_fastx_write(stdout, &rec, BL_FASTX_LINE_UNLIMITED);
+	    bl_fastx_write(&rec, stdout, BL_FASTX_LINE_UNLIMITED);
 	    ++records_written;
 	}
     }

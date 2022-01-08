@@ -48,13 +48,11 @@ int     main(int argc,char *argv[])
     bl_vcf_init(&vcf_call, 1024, 1024, 1024);
     
     // FIXME: Switch to multisample calls when implemented
-    while ( bl_vcf_read_ss_call(stdin, &vcf_call, field_mask) != BL_READ_EOF )
+    while ( bl_vcf_read_ss_call(&vcf_call, stdin, field_mask) != BL_READ_EOF )
     {
 	if ( (pos == BL_VCF_POS(&vcf_call)) &&
 	     (strcmp(chr, BL_VCF_CHROM(&vcf_call)) == 0) )
-	{
-	    bl_vcf_write_ss_call(stdout, &vcf_call, BL_VCF_FIELD_ALL);
-	}
+	    bl_vcf_write_ss_call(&vcf_call, stdout, BL_VCF_FIELD_ALL);
     }
     return EX_OK;
 }

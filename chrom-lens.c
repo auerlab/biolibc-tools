@@ -34,7 +34,7 @@ int     main(int argc,char *argv[])
     }
     
     bl_fasta_init(&record);
-    while ( (status = bl_fasta_read(stdin, &record)) == BL_READ_OK )
+    while ( (status = bl_fasta_read(&record, stdin)) == BL_READ_OK )
     {
 	p = BL_FASTA_DESC(&record) + 1;
 	printf("%s\t%zu\n", strsep(&p, " \t"), strlen(BL_FASTA_SEQ(&record)));

@@ -96,7 +96,7 @@ int     main(int argc,char *argv[])
 	// printf("%s %lu %lu\n", gff_chrom, start, end);
 	
 	// FIXME: Factor this out to bl_fasta_search() in biolibc
-	while ( bl_fasta_read(fasta_stream, &fasta_rec) == BL_READ_OK )
+	while ( bl_fasta_read(&fasta_rec, fasta_stream) == BL_READ_OK )
 	{
 	    fasta_chrom = BL_FASTA_DESC(&fasta_rec) + 1;    // Skip '>'
 	    if ( memcmp(fasta_chrom, gff_chrom, chrom_len) == 0 )

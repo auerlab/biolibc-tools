@@ -14,10 +14,10 @@ int     main(int argc,char *argv[])
     if ( argc != 1 )
 	usage(argv);
     
-    while ( bl_gff_read(&gff_feature, BL_GFF_FIELD_ALL, stdin) == BL_READ_OK )
+    while ( bl_gff_read(&gff_feature, stdin, BL_GFF_FIELD_ALL) == BL_READ_OK )
     {
 	bl_gff_to_bed(&gff_feature, &bed_feature);
-	bl_bed_write(&bed_feature, BL_BED_FIELD_ALL, stdout);
+	bl_bed_write(&bed_feature, stdout, BL_BED_FIELD_ALL);
     }
     return EX_OK;
 }

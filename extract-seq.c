@@ -68,7 +68,7 @@ int     main(int argc,char *argv[])
     // FIXME: Collect a list of GFF features, not just one, and check them
     // all against each FASTA record
     // printf("Searching %s for %s %s\n", argv[1], feature_type, feature_name);
-    while ( (status = bl_gff_read(&gff_feature, BL_GFF_FIELD_ALL, gff_stream))
+    while ( (status = bl_gff_read(&gff_feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {
 	if ( (strcmp(BL_GFF_FEATURE(&gff_feature), feature_type) == 0) &&

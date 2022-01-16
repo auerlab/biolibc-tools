@@ -127,7 +127,7 @@ To facilitate incorporation into package managers, the Makefile respects
 standard make/environment variables such as CC, CFLAGS, PREFIX, etc.  
 
 Add-on libraries required for the build, such as libxtend, should be found
-under ${LOCABASE}, which defaults to ../local.
+under ${LOCALBASE}, which defaults to ../local.
 The programs, scripts, and man pages are installed under
 ${DESTDIR}${PREFIX}.  DESTDIR is empty by default and is primarily used by
 package managers to stage installations.  PREFIX defaults to ${LOCALBASE}.

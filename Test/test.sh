@@ -22,6 +22,7 @@ else
     printf "Differences found, test failed.\n"
     printf "Check temp.fastq.\n"
 fi
+pause
 
 printf "\n===\nTesting fastx-derep...\n"
 ../fastx-derep < test.fastq | ../fastx2tsv | sort -k 2 \
@@ -34,6 +35,7 @@ else
     printf "Check temp.fastq.\n"
     more temp.fastq
 fi
+pause
 
 printf "\n===\nTesting fasta2seq...\n"
 ../fasta2seq < test.fasta > temp.seq

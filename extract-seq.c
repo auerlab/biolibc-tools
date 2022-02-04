@@ -71,7 +71,7 @@ int     main(int argc,char *argv[])
     while ( (status = bl_gff_read(&gff_feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {
-	if ( (strcmp(BL_GFF_FEATURE(&gff_feature), feature_type) == 0) &&
+	if ( (strcmp(BL_GFF_TYPE(&gff_feature), feature_type) == 0) &&
 	     (strstr(BL_GFF_ATTRIBUTES(&gff_feature), search_key) != NULL) )
 	{
 	    // bl_gff_write(&gff_feature, BL_GFF_FIELD_ALL, stdout);
@@ -89,7 +89,7 @@ int     main(int argc,char *argv[])
 		    strerror(errno));
 	    return EX_NOINPUT;
 	}
-	gff_chrom = BL_GFF_SEQUENCE(&gff_feature);
+	gff_chrom = BL_GFF_SEQID(&gff_feature);
 	chrom_len = strlen(gff_chrom);
 	start = BL_GFF_START(&gff_feature);
 	end = BL_GFF_END(&gff_feature);

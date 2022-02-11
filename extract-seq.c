@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <biolibc/gff.h>
 #include <biolibc/fasta.h>
+#include <xtend/file.h>
 
 #define KEY_MAX     1024
 
@@ -54,7 +55,7 @@ int     main(int argc,char *argv[])
     
     
     // FIXME: Limit field input
-    if ( (gff_stream = fopen(gff_file, "r")) == NULL )
+    if ( (gff_stream = xt_fopen(gff_file, "r")) == NULL )
     {
 	fprintf(stderr, "%s: Cannot open %s: %s\n", argv[0], gff_file,
 		strerror(errno));
@@ -83,7 +84,7 @@ int     main(int argc,char *argv[])
     // Extract sequence from FASTA
     if ( status == BL_READ_OK )
     {
-	if ( (fasta_stream = fopen(fasta_file, "r")) == NULL )
+	if ( (fasta_stream = xt_fopen(fasta_file, "r")) == NULL )
 	{
 	    fprintf(stderr, "%s: Cannot open %s: %s\n", argv[0], fasta_file,
 		    strerror(errno));

@@ -21,6 +21,8 @@ if diff correct-uniq.fastq temp.fastq; then
 else
     printf "Differences found, test failed.\n"
     printf "Check temp.fastq.\n"
+    pause
+    more temp.fastq
 fi
 pause
 
@@ -33,6 +35,7 @@ if diff correct-uniq.fastq temp.fastq; then
 else
     printf "Differences found, test failed.\n"
     printf "Check temp.fastq.\n"
+    pause
     more temp.fastq
 fi
 pause
@@ -41,25 +44,26 @@ printf "\n===\nTesting fasta2seq...\n"
 ../fasta2seq < test.fasta > temp.seq
 if diff correct.seq temp.seq; then
     printf "No differences found, test passed.\n"
-    rm -f temp.seq
 else
     printf "Differences found, test failed.\n"
     printf "Check temp.seq.\n"
+    pause
     more temp.seq
 fi
+pause
 
 printf "\n===\nTesting find-orfs...\n"
-../fasta2seq < test.fasta > temp.seq
-../find-orfs < temp.seq > temp.orfs
-rm -f temp.seq
+../find-orfs 0 < temp.seq > temp.orfs
 if diff correct.orfs temp.orfs; then
     printf "No differences found, test passed.\n"
-    rm -f temp.orfs
+    rm -f temp.seq temp.orfs
 else
     printf "Differences found, test failed.\n"
     printf "Check temp.orfs.\n"
+    pause
     more temp.orfs
 fi
+pause
 
 printf "\n===\nTesting vcf-search...\n"
 ../vcf-search chr1 4580 < test.vcf > temp.vcf
@@ -69,5 +73,6 @@ if diff correct.vcf temp.vcf; then
 else
     printf "Differences found, test failed.\n"
     printf "Check temp.vcf.\n"
+    pause
     more temp.vcf
 fi

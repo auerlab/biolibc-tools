@@ -19,6 +19,7 @@ int     main(int argc,char *argv[])
     bl_fasta_init(&fasta_rec);
     while ( bl_fasta_read(&fasta_rec, stdin) != EOF )
 	printf("%s", BL_FASTA_SEQ(&fasta_rec));
+    putchar('\n');
     return EX_OK;
 }
 

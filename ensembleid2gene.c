@@ -70,7 +70,7 @@ int     main(int argc,char *argv[])
 		
 		// Print feature name without trailing -###
 		if ( strcasecmp(id_list[c], id) == 0 )
-		    fprintf(stderr, "%s\t%s\n", id_list[c],
+		    printf("%s\t%s\n", id_list[c],
 			    strsep(&BL_GFF_FEATURE_NAME(&feature), "-"));
 	    }
 	}

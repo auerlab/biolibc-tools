@@ -50,13 +50,14 @@ blt fastx2tsv < file.fasta > file.tsv
 blt fasta2seq < file.fasta | blt find-orfs 0
 blt gff2bed < file.gff > file.bed
 blt vcf-search chr1 23244 < file.vcf
+blt ensembleid2gene file.gff3 ids.txt > ids-and-gene-names.tsv
 .ad
 .fi
 
 .SH "SEE ALSO"
 blt-chrom-lens(1), blt-extract-seq(1), blt-fasta2seq(1), blt-fastx-derep(1),
 blt-fastx-stats(1), blt-fastx2tsv(1), blt-fasta2seq(1), blt-find-orfs(1),
-blt-gff2bed(1), blt-vcf-search(1)
+blt-gff2bed(1), blt-vcf-search(1), blt-ensembleid2gene
 
 .SH AUTHOR
 .nf

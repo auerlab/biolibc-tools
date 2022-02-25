@@ -13,6 +13,7 @@
 
 # Default to ../local if PREFIX is not set
 : ${PREFIX:=../local}
+: ${LOCALBASE:=/usr/local}
 
 # OS-dependent tricks
 # Set rpath to avoid picking up libs installed by package managers in
@@ -34,5 +35,6 @@ case $(uname) in
 
 esac
 
+export PREFIX LOCALBASE
 make clean
 make install

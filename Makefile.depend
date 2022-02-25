@@ -13,24 +13,3 @@ extract-seq.o: extract-seq.c
 fasta2seq.o: fasta2seq.c
 	${CC} -c ${CFLAGS} fasta2seq.c
 
-fastx-derep.o: fastx-derep.c
-	${CC} -c ${CFLAGS} fastx-derep.c
-
-fastx-diff.o: fastx-diff.c
-	${CC} -c ${CFLAGS} fastx-diff.c
-
-fastx-stats.o: fastx-stats.c
-	${CC} -c ${CFLAGS} fastx-stats.c
-
-fastx2tsv.o: fastx2tsv.c
-	${CC} -c ${CFLAGS} fastx2tsv.c
-
-find-orfs.o: find-orfs.c
-	${CC} -c ${CFLAGS} find-orfs.c
-
-gff2bed.o: gff2bed.c
-	${CC} -c ${CFLAGS} gff2bed.c
-
-vcf-search.o: vcf-search.c
-	${CC} -c ${CFLAGS} vcf-search.c
-

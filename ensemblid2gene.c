@@ -1,6 +1,6 @@
 /***************************************************************************
  *  Description:
- *      Report the gane names for a list of ensemble IDs.
+ *      Report the gane names for a list of ensembl IDs.
  *  
  *  History: 
  *  Date        Name        Modification
@@ -40,7 +40,7 @@ int     main(int argc,char *argv[])
 
     if ( (id_stream = fopen(id_file, "r")) == NULL )
     {
-	fprintf(stderr, "ensembleid2gene: Could not open %s for read.\n",
+	fprintf(stderr, "ensemblid2gene: Could not open %s for read.\n",
 		id_file);
 	exit(EX_NOINPUT);
     }
@@ -49,7 +49,7 @@ int     main(int argc,char *argv[])
 
     if ( (gff_stream = fopen(gff_file, "r")) == NULL )
     {
-	fprintf(stderr, "ensembleid2gene: Could not open %s for read.\n",
+	fprintf(stderr, "ensemblid2gene: Could not open %s for read.\n",
 		gff_file);
 	exit(EX_NOINPUT);
     }

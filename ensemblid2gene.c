@@ -23,8 +23,7 @@ int     main(int argc,char *argv[])
     char    *gff_file, *id_file;
     FILE    *gff_stream, *id_stream;
     char    **id_list, *id, *p;
-    size_t  c,
-	    id_count;
+    size_t  c, id_count;
     bl_gff_t    feature;
     
     switch(argc)
@@ -58,7 +57,7 @@ int     main(int argc,char *argv[])
     bl_gff_skip_header(gff_stream);
     while ( bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL) == BL_READ_OK )
     {
-	for (c = 0; id_list[c] != NULL; ++c)
+	for (c = 0; c < id_count; ++c)
 	{
 	    id = BL_GFF_FEATURE_ID(&feature);
 	    if ( id != NULL )

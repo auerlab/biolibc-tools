@@ -87,7 +87,7 @@ int     main(int argc, char *argv[])
 	gettimeofday(&start_hash, NULL);
 	hash = XXH64(bl_fastx_seq(&rec), bl_fastx_seq_len(&rec), seed);
 	gettimeofday(&end_hash, NULL);
-	hash_time += difftimeofday(&end_hash, &start_hash);
+	hash_time += xt_difftimeofday(&end_hash, &start_hash);
 	
 	/*
 	 *  Note: We assume XXH64 produces no collisions, i.e. only
@@ -101,7 +101,7 @@ int     main(int argc, char *argv[])
 	gettimeofday(&start_table_find, NULL);
 	HASH_FIND(hh, table, &hash, sizeof(hash), found);
 	gettimeofday(&end_table_find, NULL);
-	table_find_time += difftimeofday(&end_table_find, &start_table_find);
+	table_find_time += xt_difftimeofday(&end_table_find, &start_table_find);
 	if ( found == NULL )
 	{
 	    // Record key for comparison to future records
@@ -110,7 +110,7 @@ int     main(int argc, char *argv[])
 	    entry->hash = hash;
 	    HASH_ADD(hh, table, hash, sizeof(entry->hash), entry);
 	    gettimeofday(&end_table_add, NULL);
-	    table_add_time += difftimeofday(&end_table_add, &start_table_add);
+	    table_add_time += xt_difftimeofday(&end_table_add, &start_table_add);
 	    
 	    // Output record
 	    bl_fastx_write(&rec, stdout, BL_FASTX_LINE_UNLIMITED);

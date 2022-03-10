@@ -46,6 +46,9 @@ biolibc-tools package in another package manager, please consider creating a
 package yourself.  This will be one of the easiest packages in the collection
 and hence a good vehicle to learn how to create packages.
 
+For an overview of available package managers, see the
+[Repology website](https://repology.org/).
+
 ### Installing biolibc-tools on FreeBSD:
 
 FreeBSD is a highly underrated platform for scientific computing, with over

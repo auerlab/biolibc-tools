@@ -1,6 +1,8 @@
 /***************************************************************************
  *  Description:
- *      Report the gane names for a list of ensembl IDs.
+ *      Report the gane names for a list of ensembl IDs.  IDs should
+ *      be genes, transcripts, or other elements containing
+ *      ID=<ensembl-id> and Name=<gene> in the attributes.
  *  
  *  History: 
  *  Date        Name        Modification
@@ -52,26 +54,34 @@ int     main(int argc,char *argv[])
 		gff_file);
 	exit(EX_NOINPUT);
     }
+    bl_gff_skip_header(gff_stream);
     
     bl_gff_init(&feature);
-    bl_gff_skip_header(gff_stream);
     while ( bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL) == BL_READ_OK )
     {
-	for (c = 0; c < id_count; ++c)
+	//printf("%s ", BL_GFF_FEATURE_NAME(&feature));
+	//fflush(stdout);
+	id = BL_GFF_FEATURE_ID(&feature);
+	if ( id != NULL )
 	{
-	    id = BL_GFF_FEATURE_ID(&feature);
-	    if ( id != NULL )
-	    {
-		// GFF ID format is  ID=feature-type:feature-id
-		// E.g. ID=gene:ENS00000000
-		if ( (p = strchr(id, ':')) != NULL )
-		    id = p + 1;
-		
-		// Print feature name without trailing -###
-		if ( strcasecmp(id_list[c], id) == 0 )
-		    printf("%s\t%s\n", id_list[c],
-			    strsep(&BL_GFF_FEATURE_NAME(&feature), "-"));
-	    }
+	    // GFF ID format is  ID=feature-type:feature-id
+	    // E.g. ID=gene:ENS00000000
+	    if ( (p = strchr(id, ':')) != NULL )
+		id = p + 1;
+	
+	    // Find ID in the list matching this feature's ID= attribute
+	    // Name= should then contain the gene name, assuming this ID
+	    // is for a transcript or gene as it should be
+	    // FIXME: Maybe presort and use a binary search in case
+	    // the ID list is large
+	    for (c = 0; (c < id_count) && 
+			(strcasecmp(id_list[c], id) != 0 ); ++c)
+		;
+	
+	    // Print feature name without trailing -###
+	    if ( c < id_count )
+		printf("%s\t%s\n", id_list[c],
+			strsep(&BL_GFF_FEATURE_NAME(&feature), "-"));
 	}
     }
     fclose(gff_stream);

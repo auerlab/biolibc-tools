@@ -36,7 +36,7 @@ int     main(int argc,char *argv[])
     size_t      chrom_len,
 		feature_len;
     unsigned long   start, end;
-    bl_gff_t    gff_feature = BL_GFF_INIT;
+    bl_gff_t    gff_feature;
     bl_fasta_t  fasta_rec = BL_FASTA_INIT;
     
     switch(argc)
@@ -69,6 +69,7 @@ int     main(int argc,char *argv[])
     // FIXME: Collect a list of GFF features, not just one, and check them
     // all against each FASTA record
     // printf("Searching %s for %s %s\n", argv[1], feature_type, feature_name);
+    bl_gff_init(&gff_feature);
     while ( (status = bl_gff_read(&gff_feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {

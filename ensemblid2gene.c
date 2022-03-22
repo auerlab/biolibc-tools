@@ -80,8 +80,12 @@ int     main(int argc,char *argv[])
 	
 	    // Print feature name without trailing -###
 	    if ( c < id_count )
-		printf("%s\t%s\n", id_list[c],
-			strsep(&BL_GFF_FEATURE_NAME(&feature), "-"));
+	    {
+		p = BL_GFF_FEATURE_NAME(&feature);
+		printf("%s\t%s\n", id_list[c], strsep(&p, "-"));
+		if ( p != NULL )
+		    p[-1] = '-';
+	    }
 	}
     }
     fclose(gff_stream);

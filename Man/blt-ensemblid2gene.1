@@ -15,7 +15,9 @@ blt ensemblid2gene file.gff3 ids.txt > ids-and-gene-names.tsv
 .B blt ensemblid2gene
 reads a list of Ensembl IDs, one per line, and outputs them along with
 their associated gene name, in TSV (tab-separated-values) format.
-
+IDs should be genes, transcripts, or other elements containing
+ID=<ensembl-id> and Name=<gene> in the attributes.                 
+    
 .SH EXAMPLES
 .nf
 .na

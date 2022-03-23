@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <xtend/file.h>
 #include <xtend/mem.h>
+#include <xtend/string.h>
 #include <biolibc/gff.h>
 
 void    usage(char *argv[]);
@@ -24,8 +25,8 @@ int     main(int argc,char *argv[])
 {
     char    *gff_file, *id_file;
     FILE    *gff_stream, *id_stream;
-    char    **id_list, *id, *p;
-    size_t  c, id_count;
+    char    **id_list, *id, *p, **found;
+    size_t  id_count;
     bl_gff_t    feature;
     
     switch(argc)
@@ -47,7 +48,7 @@ int     main(int argc,char *argv[])
     }
     id_count = xt_inhale_strings(id_stream, &id_list);
     fclose(id_stream);
-
+    qsort(id_list, id_count, sizeof(*id_list), (int(*)(const void *,const void*))strptrcmp);
     if ( (gff_stream = fopen(gff_file, "r")) == NULL )
     {
 	fprintf(stderr, "ensemblid2gene: Could not open %s for read.\n",
@@ -72,17 +73,14 @@ int     main(int argc,char *argv[])
 	    // Find ID in the list matching this feature's ID= attribute
 	    // Name= should then contain the gene name, assuming this ID
 	    // is for a transcript or gene as it should be
-	    // FIXME: Maybe presort and use a binary search in case
-	    // the ID list is large
-	    for (c = 0; (c < id_count) && 
-			(strcasecmp(id_list[c], id) != 0 ); ++c)
-		;
-	
+	    found = bsearch(&id, id_list, id_count, sizeof(*id_list),
+		    (int (*)(const void *, const void *))strptrcasecmp);
+	    
 	    // Print feature name without trailing -###
-	    if ( c < id_count )
+	    if ( found != NULL )
 	    {
 		p = BL_GFF_FEATURE_NAME(&feature);
-		printf("%s\t%s\n", id_list[c], strsep(&p, "-"));
+		printf("%s\t%s\n", *found, strsep(&p, "-"));
 		if ( p != NULL )
 		    p[-1] = '-';
 	    }

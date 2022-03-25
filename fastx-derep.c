@@ -13,6 +13,8 @@
  *      to write bioinformatics apps in C, given the right libraries.
  *      In this case, biolibc handles all the FASTQ I/O, xxhash the sequence
  *      hasing, and uthash the hash table management.
+ *
+ *      FIXME: Add paired-end mode to keep paired files in sync
  *  
  *  History: 
  *  Date        Name        Modification

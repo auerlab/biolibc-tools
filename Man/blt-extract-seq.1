@@ -6,7 +6,8 @@
 .PP
 .nf 
 .na
-blt extract-seq file.gff3 file.fasta feature-type feature-name
+blt extract-seq file.gff3 file.fasta feature-type \\
+    search-key [search-key ...] | --name-list file.txt | --id-list file.txt
 .ad
 .fi
 
@@ -14,12 +15,20 @@ blt extract-seq file.gff3 file.fasta feature-type feature-name
 
 .B blt extract-seq
 searches a GFF3 file for a feature of feature-type (e.g. gene, CDS, exon)
-and if found, extracts the sequence for that feature from the corresponding
-FASTA file.
+and a substring of the attributes field.
+If found, extracts the sequence for that feature from the corresponding
+FASTA file and prints the sequence to the standard output in FASTA format
+using the GFF data as the description line.
+
+Search-key is any exact substring of the attributes column in the GFF,
+without regard for upper/lower case.
+To match a gene name exactly, include ';' in the search key. e.g.
+'Name=jun;'  Searching for 'Name=jun' will match jun, juna, junb, etc.
+View your GFF file with "more file.gff3" to get ideas for search-key.
 
 It is the user's responsibility to ensure that the GFF and FASTA files are
 compatible.  They should be from the same source (NCBI, Ensemble, etc) and
-the same genome build.
+the same genome build and release.
 
 .SH EXAMPLES
 .nf

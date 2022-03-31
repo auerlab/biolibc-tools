@@ -38,7 +38,7 @@ int     main(int argc,char *argv[])
     unsigned long   start, end;
     bl_gff_t    gff_feature;
     bl_fasta_t  fasta_rec = BL_FASTA_INIT;
-    
+
     switch(argc)
     {
 	case 5:
@@ -73,8 +73,8 @@ int     main(int argc,char *argv[])
     while ( (status = bl_gff_read(&gff_feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {
-	if ( (strcmp(BL_GFF_TYPE(&gff_feature), feature_type) == 0) &&
-	     (strstr(BL_GFF_ATTRIBUTES(&gff_feature), search_key) != NULL) )
+	if ( (strcasecmp(BL_GFF_TYPE(&gff_feature), feature_type) == 0) &&
+	     (strcasestr(BL_GFF_ATTRIBUTES(&gff_feature), search_key) != NULL) )
 	{
 	    // bl_gff_write(&gff_feature, BL_GFF_FIELD_ALL, stdout);
 	    break;

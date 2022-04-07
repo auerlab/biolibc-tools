@@ -7,6 +7,10 @@
  *  2021-10-28  Jason Bacon Begin
  ***************************************************************************/
 
+#ifdef __linux__
+#define _GNU_SOURCE // strcasestr()
+#endif
+
 #include <stdio.h>
 #include <sysexits.h>
 #include <stdlib.h>

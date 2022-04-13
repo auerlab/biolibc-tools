@@ -16,9 +16,10 @@ blt extract-seq file.gff3 file.fasta feature-type \\
 .B blt extract-seq
 searches a GFF3 file for a feature of feature-type (e.g. gene, CDS, exon)
 and a substring of the attributes field.
-If found, extracts the sequence for that feature from the corresponding
-FASTA file and prints the sequence to the standard output in FASTA format
-using the GFF data as the description line.
+If found, extracts the sequence for that feature and all subfeatures
+from the corresponding
+FASTA file and prints the sequences to the standard output in FASTA format
+using part of the GFF data as the description line.
 
 Search-key is any exact substring of the attributes column in the GFF,
 without regard for upper/lower case.

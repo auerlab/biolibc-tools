@@ -23,8 +23,8 @@
 
 #define KEY_MAX     1024
 
-int     process_subfeatures(bl_fasta_t *fasta_rec, FILE *gff_stream,
-			    char *feature_type, char *parent);
+int     print_subfeatures(bl_fasta_t *fasta_rec,
+			    bl_gff_t *feature, FILE *gff_stream);
 void    print_seq(char *feature_seq, int64_t start, int64_t end);
 void    usage(char *argv[]);
 
@@ -35,12 +35,10 @@ int     main(int argc,char *argv[])
 		*gff_stream;
     char        *gff_file,
 		*fasta_file,
-		*feature_type,
+		*primary_feature_type,
 		*search_key,
 		*gff_chrom,
-		*fasta_chrom,
-		*parent_gene,
-		*parent_transcript;
+		*fasta_chrom;
     int         status;
     size_t      chrom_len;
     unsigned long   start, end;
@@ -53,7 +51,7 @@ int     main(int argc,char *argv[])
 	case 5:
 	    gff_file = argv[1];
 	    fasta_file = argv[2];
-	    feature_type = argv[3];
+	    primary_feature_type = argv[3];
 	    search_key = argv[4];
 	    break;
 	
@@ -76,13 +74,12 @@ int     main(int argc,char *argv[])
     // FIXME: Factor this out to a bl_gff_search() function in biolibc
     // FIXME: Collect a list of GFF features, not just one, and check them
     // all against each FASTA record
-    // printf("Searching %s for %s %s\n", argv[1], feature_type, feature_name);
+    // printf("Searching %s for %s %s\n", argv[1], primary_feature_type, feature_name);
     bl_gff_init(&feature);
-    parent_gene = parent_transcript = "X";
     while ( (status = bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {
-	if ( (strcasecmp(BL_GFF_TYPE(&feature), feature_type) == 0) &&
+	if ( (strcasecmp(BL_GFF_TYPE(&feature), primary_feature_type) == 0) &&
 	     (strcasestr(BL_GFF_ATTRIBUTES(&feature), search_key) != NULL) )
 	{
 	    gff_chrom = BL_GFF_SEQID(&feature);
@@ -92,7 +89,7 @@ int     main(int argc,char *argv[])
 	    // printf("%s %lu %lu\n", gff_chrom, start, end);
 	    
 	    printf("> %s %" PRId64 " %" PRId64 " %s %s %s %s %s\n", gff_chrom, start, end,
-		    feature_type, search_key, 
+		    primary_feature_type, search_key, 
 		    BL_GFF_ATTRIBUTES(&feature), gff_file, fasta_file);
 
 	    // GFFs are sorted lexically and FASTAs numerically
@@ -118,19 +115,10 @@ int     main(int argc,char *argv[])
 		    print_seq(BL_FASTA_SEQ(&fasta_rec), start, end);
 		    
 		    // Process subfeatures
-		    if ( strcmp(feature_type, "gene") == 0 )
-		    {
-			parent_gene = BL_GFF_FEATURE_ID(&feature);
-			fprintf(stderr, "Parent = %s\n", parent_gene);
-			process_subfeatures(&fasta_rec, gff_stream,
-					    feature_type, parent_gene);
-		    }
-		    else if ( strcmp(feature_type, "mRNA") == 0 )
-		    {
-			parent_transcript = BL_GFF_FEATURE_ID(&feature);
-			fprintf(stderr, "Parent = %s\n", parent_transcript);
-			// while read GFF != "mRNA"
-		    }
+		    // FIXME: Other feature types with subfeatures?
+		    if ( (strcmp(primary_feature_type, "gene") == 0) ||
+			 (strcmp(primary_feature_type, "transcript") == 0) )
+			print_subfeatures(&fasta_rec, &feature, gff_stream);
 		}
 	    }
 	    fclose(fasta_stream);
@@ -138,86 +126,65 @@ int     main(int argc,char *argv[])
     }
     fclose(gff_stream);
     
-    // Extract sequence from FASTA
     return EX_OK;
 }
 
 
 /***************************************************************************
- *  Use auto-c2man to generate a man page from this comment
- *
- *  Library:
- *      #include <>
- *      -l
- *
  *  Description:
- *  
- *  Arguments:
- *
- *  Returns:
- *
- *  Examples:
- *
- *  Files:
- *
- *  Environment
- *
- *  See also:
+ *      Recursively output subfeatures of the given feature
  *
  *  History: 
  *  Date        Name        Modification
  *  2022-04-12  Jason Bacon Begin
  ***************************************************************************/
 
-int     process_subfeatures(bl_fasta_t *fasta_rec, FILE *gff_stream,
-			    char *feature_type, char *parent)
+int     print_subfeatures(bl_fasta_t *fasta_rec,
+			    bl_gff_t *feature, FILE *gff_stream)
 
 {
-    bl_gff_t    feature;
+    int     status;
+    char    *parent_feature_type,
+	    *parent_feature_id;
+
+    // Recursive calls will overwrite feature, so save information needed
+    // by this level
+    parent_feature_type = strdup(BL_GFF_TYPE(feature));
+    parent_feature_id = strdup(BL_GFF_FEATURE_ID(feature));
     
-    fprintf(stderr, "Processing subfeatures of %s %s\n", feature_type, parent);
     // Read everything to next feature of the same type, i.e. all subfeatures
-    bl_gff_init(&feature);
-    while ( (bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL) == BL_READ_OK)
-	    && (strcmp(BL_GFF_TYPE(&feature), feature_type) != 0) )
+    // of a gene or transcript
+    status = bl_gff_read(feature, gff_stream, BL_GFF_FIELD_ALL);
+    while ( (status == BL_READ_OK) &&
+	    (strcmp(BL_GFF_FEATURE_PARENT(feature), parent_feature_id) == 0) )
     {
-	if ( strcmp(BL_GFF_FEATURE_PARENT(&feature), parent) == 0 )
-	{
-	    printf("> %s %" PRId64 " %" PRId64 " %s %s\n",
-		    BL_GFF_SEQID(&feature),
-		    BL_GFF_START(&feature),
-		    BL_GFF_END(&feature),
-		    BL_GFF_TYPE(&feature),
-		    BL_GFF_ATTRIBUTES(&feature));
-	    print_seq(BL_FASTA_SEQ(fasta_rec),
-		      BL_GFF_START(&feature), BL_GFF_END(&feature));
-	}
+	printf("> %s %" PRId64 " %" PRId64 " %s %s\n",
+		BL_GFF_SEQID(feature),
+		BL_GFF_START(feature),
+		BL_GFF_END(feature),
+		BL_GFF_TYPE(feature),
+		BL_GFF_ATTRIBUTES(feature));
+	
+	print_seq(BL_FASTA_SEQ(fasta_rec),
+		  BL_GFF_START(feature), BL_GFF_END(feature));
+	
+	// Recurse from gene -> transcript -> exon, etc.
+	if ( (strcmp(BL_GFF_TYPE(feature), "gene") == 0) ||
+	     (strcmp(BL_GFF_TYPE(feature), "mRNA") == 0) )
+	    status = print_subfeatures(fasta_rec, feature, gff_stream);
+	else
+	    status = bl_gff_read(feature, gff_stream, BL_GFF_FIELD_ALL);
     }
-    return 0;   // FIXME: Return a status value
+    
+    free(parent_feature_type);
+    free(parent_feature_id);
+    return status;   // FIXME: Return a status value
 }
 
 
-
 /***************************************************************************
- *  Use auto-c2man to generate a man page from this comment
- *
- *  Library:
- *      #include <>
- *      -l
- *
  *  Description:
- *  
- *  Arguments:
- *
- *  Returns:
- *
- *  Examples:
- *
- *  Files:
- *
- *  Environment
- *
- *  See also:
+ *      Print a substring of a sequence
  *
  *  History: 
  *  Date        Name        Modification
@@ -231,8 +198,8 @@ void    print_seq(char *feature_seq, int64_t start, int64_t end)
     int     save_base;
     
     feature_seq += start - 1;
-    feature_seq[feature_len] = '\0';
     save_base = feature_seq[feature_len];
+    feature_seq[feature_len] = '\0';    // Temporary null-terminator
     puts(feature_seq);
     feature_seq[feature_len] = save_base;
 }

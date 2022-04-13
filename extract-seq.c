@@ -208,7 +208,7 @@ void    print_seq(char *feature_seq, int64_t start, int64_t end)
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "\nUsage: %s file.gff3 file.fasta feature-type 'search-key'\n", argv[0]);
+    fprintf(stderr, "\nUsage: %s file.gff3 file.fasta[.gz|.bz2|.xz] feature-type 'search-key'\n\n", argv[0]);
     fprintf(stderr, "Search-key is any exact substring of the attributes column in the GFF.\n");
     fprintf(stderr, "To match a gene name exactly, include ';' in the search key. e.g. 'Name=jun;'\n");
     fprintf(stderr, "View your GFF file with \"more file.gff3\" to get ideas for search-key.\n");

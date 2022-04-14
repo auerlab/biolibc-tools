@@ -1,7 +1,7 @@
 /***************************************************************************
  *  Description:
  *      Report the gane names for a list of ensembl IDs.  IDs should
- *      be genes, transcripts, or other elements containing
+ *      be genes, transcripts, or other elements containing both
  *      ID=<ensembl-id> and Name=<gene> in the attributes.
  *  
  *  History: 

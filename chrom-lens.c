@@ -1,7 +1,9 @@
 /***************************************************************************
  *  Description:
- *      Generate chromosome length file as required by kallisto, directly
- *      from the FASTA file
+ *      Generate a chromosome length TSV file as required by kallisto,
+ *      directly from a FASTA file.  Obtaining lengths elsewhere runs the
+ *      risk of getting inaccurate results by accidentally getting
+ *      information from a different build/release of the genome.
  *
  *  History: 
  *  Date        Name        Modification

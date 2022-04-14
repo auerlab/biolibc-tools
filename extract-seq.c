@@ -1,6 +1,10 @@
 /***************************************************************************
  *  Description:
- *      Extract a sequence from a reference genome using info from a GFF.
+ *      Extract the sequences of a GFF feature and all of its subfeatures
+ *      from a reference genome in FASTA format.
+ *
+ *      If the feature type is "gene" or "mRNA", a recursive search of the
+ *      GFF structure for subfeatures is automatically performed.
  *
  *  History: 
  *  Date        Name        Modification

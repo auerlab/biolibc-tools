@@ -1,6 +1,11 @@
 /***************************************************************************
  *  Description:
- *      Gather basic stats on a FAST[AQ] file
+ *      Show differences between two FAST[AQ] files, like the standard
+ *      Unix diff commmand for plain text files.
+ *
+ *      Currently very simple and only useful to compare files with the
+ *      same set of reads that have been modified in some way, such as
+ *      a trimmed and untrimmed version of a FASTQ.
  *  
  *  History: 
  *  Date        Name        Modification

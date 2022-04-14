@@ -12,13 +12,6 @@ They provide permanent, portable solutions for basic data processing tasks
 in a form that's easier to install and use, and often more CPU and memory
 efficient than analogous tools.
 
-## Status and goals
-
-We're just getting started here, having implemented a few basic example
-tools.  The long-term aim is to improve features and robustness and develop
-new tools in response to needs that are not conveniently met by analogous
-tools.
-
 The needs met by biolibc-tools will in turn drive improvements to biolibc.
 Most of the new code will go into the library, making it easier over time
 to develop more simple C tools for bioinformatics.

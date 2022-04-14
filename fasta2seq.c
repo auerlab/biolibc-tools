@@ -1,6 +1,8 @@
 /***************************************************************************
  *  Description:
- *      Convert a FASTA file to one continuous sequence
+ *      Convert a FASTA file to one continuous sequence with no
+ *      description lines, which can be easily examined using plain text
+ *      tools.
  *
  *  History: 
  *  Date        Name        Modification

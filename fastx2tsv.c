@@ -1,6 +1,10 @@
 /***************************************************************************
  *  Description:
- *      Remove replicates from a fastq stream
+ *      Convert a FASTA or FASTQ stream to TSV (tab separated values),
+ *      combining split sequences into a single line.
+ *
+ *      This makes it easy to search FASTA files using simple awk commands,
+ *      and similar.
  *  
  *  History: 
  *  Date        Name        Modification

@@ -1,6 +1,10 @@
 /***************************************************************************
  *  Description:
- *      Scan a VCF file for matching chr and position
+ *      Scan a VCF file for matching chr and position.
+ *
+ *      This is simply a faster way to search VCFs than awk, perl,
+ *      python, etc. scripts, for cases where the added performance
+ *      matters.
  *
  *  History: 
  *  Date        Name        Modification

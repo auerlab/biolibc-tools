@@ -1,3 +1,14 @@
+/***************************************************************************
+ *  Description:
+ *      Locate open reading frames (start codons and corresponding stop
+ *      codons) in a sequence stream, which is often generated from a
+ *      FASTA stream using blt fasta2seq.
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-04-14  Jason Bacon Begin
+ ***************************************************************************/
+
 #include <stdio.h>
 #include <sysexits.h>
 #include <ctype.h>

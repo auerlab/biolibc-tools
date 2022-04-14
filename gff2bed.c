@@ -1,3 +1,15 @@
+/***************************************************************************
+ *  Description:
+ *      Convert a GFF3 stream to BED format.
+ *
+ *      Some tools accept only BED files as inputs.  This program provides
+ *      a workaround.
+ *
+ *  History: 
+ *  Date        Name        Modification
+ *  2022-04-14  Jason Bacon Begin
+ ***************************************************************************/
+
 #include <stdio.h>
 #include <sysexits.h>
 #include <stdlib.h>

@@ -2,13 +2,17 @@
  *  Description:
  *      Wrapper to turn biolibc commands into subcommands.  This will help
  *      avoid future conflicts with other programs without sacrificing
- *      desriptive commands names.
+ *      desriptive command names.
+ *
  *      This wrapper can be installed under the standard
  *      PATH and used to to execute blt commands installed under a
  *      private prefix, without altering PATH, activating a special
  *      environment, opening a container, etc.  This sub-command paradigm
  *      is already familiar to bioinformaticians thanks to other suites
  *      like samtools, bedtools, etc.
+ *
+ *      The standard location for executables not meant to be in PATH
+ *      is $PREFIX/libexec.
  *
  *      Example:
  *

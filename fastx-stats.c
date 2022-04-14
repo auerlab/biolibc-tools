@@ -1,6 +1,7 @@
 /***************************************************************************
  *  Description:
- *      Gather basic stats on a FAST[AQ] file
+ *      Display basic stats on a FAST[AQ] file such as size, base content
+ *      percentages, etc.
  *  
  *  History: 
  *  Date        Name        Modification

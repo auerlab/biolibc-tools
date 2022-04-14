@@ -27,8 +27,8 @@
 
 #define KEY_MAX     1024
 
-int     print_subfeatures(bl_fasta_t *fasta_rec,
-			    bl_gff_t *feature, FILE *gff_stream);
+int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
+			  FILE *gff_stream, const char *search_key);
 void    print_seq(char *feature_seq, int64_t start, int64_t end);
 void    usage(char *argv[]);
 
@@ -92,7 +92,8 @@ int     main(int argc,char *argv[])
 	    end = BL_GFF_END(&feature);
 	    // printf("%s %lu %lu\n", gff_chrom, start, end);
 	    
-	    printf("> %s %" PRId64 " %" PRId64 " %s %s %s %s %s\n", gff_chrom, start, end,
+	    printf(">%s %s %" PRId64 " %" PRId64 " %s %s %s %s %s\n",
+		    search_key, gff_chrom, start, end,
 		    primary_feature_type, search_key, 
 		    BL_GFF_ATTRIBUTES(&feature), gff_file, fasta_file);
 
@@ -122,7 +123,8 @@ int     main(int argc,char *argv[])
 		    // FIXME: Other feature types with subfeatures?
 		    if ( (strcmp(primary_feature_type, "gene") == 0) ||
 			 (strcmp(primary_feature_type, "transcript") == 0) )
-			print_subfeatures(&fasta_rec, &feature, gff_stream);
+			print_subfeatures(&fasta_rec, &feature, gff_stream,
+					  search_key);
 		}
 	    }
 	    fclose(fasta_stream);
@@ -143,8 +145,8 @@ int     main(int argc,char *argv[])
  *  2022-04-12  Jason Bacon Begin
  ***************************************************************************/
 
-int     print_subfeatures(bl_fasta_t *fasta_rec,
-			    bl_gff_t *feature, FILE *gff_stream)
+int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
+			  FILE *gff_stream, const char *search_key)
 
 {
     int     status;
@@ -162,7 +164,8 @@ int     print_subfeatures(bl_fasta_t *fasta_rec,
     while ( (status == BL_READ_OK) &&
 	    (strcmp(BL_GFF_FEATURE_PARENT(feature), parent_feature_id) == 0) )
     {
-	printf("> %s %" PRId64 " %" PRId64 " %s %s\n",
+	printf(">%s %s %" PRId64 " %" PRId64 " %s %s\n",
+		search_key,
 		BL_GFF_SEQID(feature),
 		BL_GFF_START(feature),
 		BL_GFF_END(feature),
@@ -175,7 +178,7 @@ int     print_subfeatures(bl_fasta_t *fasta_rec,
 	// Recurse from gene -> transcript -> exon, etc.
 	if ( (strcmp(BL_GFF_TYPE(feature), "gene") == 0) ||
 	     (strcmp(BL_GFF_TYPE(feature), "mRNA") == 0) )
-	    status = print_subfeatures(fasta_rec, feature, gff_stream);
+	    status = print_subfeatures(fasta_rec, feature, gff_stream, search_key);
 	else
 	    status = bl_gff_read(feature, gff_stream, BL_GFF_FIELD_ALL);
     }

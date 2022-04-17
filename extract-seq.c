@@ -28,7 +28,7 @@
 #define KEY_MAX     1024
 
 int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
-			  FILE *gff_stream, const char *search_key);
+			  FILE *gff_stream, const char *description);
 void    print_seq(char *feature_seq, int64_t start, int64_t end);
 void    usage(char *argv[]);
 
@@ -41,6 +41,7 @@ int     main(int argc,char *argv[])
 		*fasta_file,
 		*primary_feature_type,
 		*search_key,
+		*description,
 		*gff_chrom,
 		*fasta_chrom;
     int         status;
@@ -80,6 +81,7 @@ int     main(int argc,char *argv[])
     // all against each FASTA record
     // printf("Searching %s for %s %s\n", argv[1], primary_feature_type, feature_name);
     bl_gff_init(&feature);
+    description = search_key;
     while ( (status = bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL))
 		== BL_READ_OK )
     {
@@ -92,9 +94,22 @@ int     main(int argc,char *argv[])
 	    end = BL_GFF_END(&feature);
 	    // printf("%s %lu %lu\n", gff_chrom, start, end);
 	    
-	    printf(">%s %s %" PRId64 " %" PRId64 " %s %s %s %s %s\n",
-		    search_key, gff_chrom, start, end,
-		    primary_feature_type, search_key, 
+	    // Search key may be "Name=part-of-gene".  Put more
+	    // specific info in description if possible.
+	    if ( (memcmp(search_key, "Name=", 5) == 0) &&
+		 (strcmp(BL_GFF_TYPE(&feature), "gene") == 0) )
+	    {
+		description = strdup(BL_GFF_FEATURE_NAME(&feature));
+		if ( description == NULL )
+		{
+		    fprintf(stderr, "extract-seq: Could not strdup() description.\n");
+		    return EX_UNAVAILABLE;
+		}
+	    }
+	    
+	    printf(">%s:%s %s %" PRId64 " %" PRId64 " %s %s %s %s %s\n",
+		    description, BL_GFF_TYPE(&feature),
+		    gff_chrom, start, end, primary_feature_type, search_key, 
 		    BL_GFF_ATTRIBUTES(&feature), gff_file, fasta_file);
 
 	    // GFFs are sorted lexically and FASTAs numerically
@@ -124,7 +139,7 @@ int     main(int argc,char *argv[])
 		    if ( (strcmp(primary_feature_type, "gene") == 0) ||
 			 (strcmp(primary_feature_type, "transcript") == 0) )
 			print_subfeatures(&fasta_rec, &feature, gff_stream,
-					  search_key);
+					  description);
 		}
 	    }
 	    fclose(fasta_stream);
@@ -146,7 +161,7 @@ int     main(int argc,char *argv[])
  ***************************************************************************/
 
 int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
-			  FILE *gff_stream, const char *search_key)
+			  FILE *gff_stream, const char *description)
 
 {
     int     status;
@@ -164,8 +179,8 @@ int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
     while ( (status == BL_READ_OK) &&
 	    (strcmp(BL_GFF_FEATURE_PARENT(feature), parent_feature_id) == 0) )
     {
-	printf(">%s %s %" PRId64 " %" PRId64 " %s %s\n",
-		search_key,
+	printf(">%s:%s %s %" PRId64 " %" PRId64 " %s %s\n",
+		description, BL_GFF_TYPE(feature),
 		BL_GFF_SEQID(feature),
 		BL_GFF_START(feature),
 		BL_GFF_END(feature),
@@ -178,7 +193,7 @@ int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
 	// Recurse from gene -> transcript -> exon, etc.
 	if ( (strcmp(BL_GFF_TYPE(feature), "gene") == 0) ||
 	     (strcmp(BL_GFF_TYPE(feature), "mRNA") == 0) )
-	    status = print_subfeatures(fasta_rec, feature, gff_stream, search_key);
+	    status = print_subfeatures(fasta_rec, feature, gff_stream, description);
 	else
 	    status = bl_gff_read(feature, gff_stream, BL_GFF_FIELD_ALL);
     }

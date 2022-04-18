@@ -73,7 +73,11 @@ MANPREFIX   ?= ${PREFIX}
 MANDIR      ?= ${MANPREFIX}/man
 # Don't include biolibc-tools because it won't exist outside ${DESTDIR}
 # until after install is complete
-LIBEXECDIR  ?= `realpath ${PREFIX}/libexec/biolibc-tools`
+# FIXME: Need to realpath this if relative (e.g. ../local) or blt won't
+# find subcommands from arbitrary CWD
+# Currently must use cave-man-install.sh for this until a bmake/gmake
+# portable method is found
+LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
 
 ############################################################################
 # Build flags

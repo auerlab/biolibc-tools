@@ -23,18 +23,19 @@ case $(uname) in
     if [ -z "$CFLAGS" ]; then
 	export CFLAGS="-Wall -g -O"
     fi
-    LIBDIR=$(realpath $PREFIX/lib)
-    export LDFLAGS="-L. -L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
     for pkgsrc in /usr/pkg /opt/pkg ~/Pkgsrc/pkg; do
 	if [ -e $pkgsrc ]; then
 	    echo "Using $pkgsrc..."
-	    export LOCALBASE=$pkgsrc
+	    LOCALBASE=$pkgsrc
 	fi
     done
     ;;
 
 esac
 
-export PREFIX LOCALBASE
+LIBDIR=$(realpath $PREFIX/lib)
+LDFLAGS="-L. -L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
+LIBEXECDIR=$(realpath $PREFIX/libexec)
+export PREFIX LOCALBASE LIBEXECDIR LDFLAGS
 make clean
 make install

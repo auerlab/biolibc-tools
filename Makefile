@@ -73,7 +73,7 @@ MANPREFIX   ?= ${PREFIX}
 MANDIR      ?= ${MANPREFIX}/man
 # Don't include biolibc-tools because it won't exist outside ${DESTDIR}
 # until after install is complete
-LIBEXECDIR  ?= ${PREFIX}/libexec/biolibc-tools
+LIBEXECDIR  ?= `realpath ${PREFIX}/libexec/biolibc-tools`
 
 ############################################################################
 # Build flags

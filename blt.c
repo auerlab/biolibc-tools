@@ -41,10 +41,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#ifndef LIBEXECDIR
-#define LIBEXECDIR   "/usr/local/libexec/biolibc-tools"
-#endif
-
 int     main(int argc,char *argv[])
 
 {
@@ -60,6 +56,7 @@ int     main(int argc,char *argv[])
     }
     else if ( argc < 2 )
     {
+	// LIBEXECDIR must be set by Makefile
 	fprintf(stderr, "Usage: %s subcommand [args]\n", argv[0]);
 	fprintf(stderr, "\nSubcommands:\n\n");
 	if ( (dp = opendir(LIBEXECDIR)) != NULL )
@@ -81,7 +78,7 @@ int     main(int argc,char *argv[])
 	execv(cmd, argv + 1);
     else
     {
-	fprintf(stderr, "%s: Invalid subcommand: %s\n", argv[0], argv[1]);
+	fprintf(stderr, "%s: No %s found in %s.\n", argv[0], argv[1], LIBEXECDIR);
 	return EX_USAGE;
     }
 }

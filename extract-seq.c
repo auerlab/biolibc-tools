@@ -46,7 +46,7 @@ int     main(int argc,char *argv[])
 		*fasta_chrom;
     int         status;
     size_t      chrom_len;
-    unsigned long   start, end;
+    int64_t     start, end;
     bl_gff_t    feature;
     bl_fasta_t  fasta_rec = BL_FASTA_INIT;
     bool        found_chrom;

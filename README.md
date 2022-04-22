@@ -111,9 +111,11 @@ biolibc-tools depends on
 [libxtend](https://github.com/outpaddling/libxtend).
 Install biolibc and libxtend before attempting to build biolibc-tools.
 
-1. Clone the repository
-2. Run "make depend" to update Makefile.depend
-3. Run "make install"
+1. Clone biolibc-tools and dependencies into sibling directories
+2. In each dependency directory and then in biolibc-tools:
+    
+    1. Run "make depend" to update Makefile.depend
+    2. Run "./cave-man-install.sh" if present, otherwise "make install"
 
 The default install prefix is ../local.  Clone biolibc-tools, biolibc, and
 libxtend into sibling directories so that ../local represents a common path

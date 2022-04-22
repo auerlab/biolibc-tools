@@ -67,7 +67,7 @@ pause
 
 printf "\n===\nTesting vcf-search...\n"
 ../vcf-search chr1 4580 < test.vcf > temp.vcf
-if diff correct.vcf temp.vcf; then
+if diff correct-search.vcf temp.vcf; then
     printf "No differences found, test passed.\n"
     rm -f temp.vcf
 else
@@ -76,3 +76,8 @@ else
     pause
     more temp.vcf
 fi
+
+printf "\n===\nTesting vcf-downsample...\n"
+../vcf-downsample 50 < test.vcf > temp.vcf
+wc -l test.vcf temp.vcf
+more temp.vcf

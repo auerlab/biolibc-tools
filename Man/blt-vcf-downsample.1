@@ -1,0 +1,43 @@
+.TH blt\ vcf-downsample 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt vcf-downsample desired-count < input.vcf > output.vcf
+.ad
+.fi
+
+.SH DESCRIPTION
+
+.B blt vcf-downsample
+Outputs a uniformly random sample of roughly desired-count VCF calls from
+the input.  The strategy involves generating a random number which is
+compared to desired-count / original-count for each input VCF call, and
+outputting it only if the random number is less.  As a result, the actual
+number of output calls is usually not exactly desired-count, but is usually
+within a few percent.
+
+The program is quite fast, so if the actual count is too far off for your
+needs, one strategy is to simply discard the output and try again.
+
+Currently only single-sample VCFs are supported.  Multi-sample VCFs will
+be supported if and when a need is encountered.
+
+.SH EXAMPLES
+.nf
+.na
+blt vcf-downsample 1000 < input.vcf > output.vcf
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

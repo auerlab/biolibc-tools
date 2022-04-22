@@ -83,8 +83,13 @@ of the nearly 20,000 packages in the collection.  The
 [auto-pkgsrc-setup](https://github.com/outpaddling/auto-admin/blob/master/Scripts/auto-pkgsrc-setup) script can assist you with
 basic setup.
 
-First bootstrap pkgsrc using auto-pkgsrc-setup or any
-other method.  Then run the following commands:
+First bootstrap pkgsrc using auto-pkgsrc-setup or any other method.
+Running auto-pkgsrc-setup should take about 10 minutes given default
+responses or 45 minutes if you choose all the bells and whistles (e.g.
+respond 'y' to installing the work-in-progress package collection
+and Mozilla certs).
+
+Then run the following commands:
 
 ```
 cd pkgsrc-dir/biology/biolibc-tools

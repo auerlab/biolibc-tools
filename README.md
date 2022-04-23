@@ -84,10 +84,6 @@ of the nearly 20,000 packages in the collection.  The
 script will guide you through a basic setup in minutes.
 
 First bootstrap pkgsrc using auto-pkgsrc-setup or any other method.
-Running auto-pkgsrc-setup should take about 10 minutes given default
-responses or 45 minutes if you choose all the bells and whistles (e.g.
-respond 'y' to installing the work-in-progress package collection
-and Mozilla certs).
 
 Then run the following commands:
 

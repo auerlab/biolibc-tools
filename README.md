@@ -81,7 +81,7 @@ Using pkgsrc does not require admin privileges.  You can install a pkgsrc
 tree in any directory to which you have write access and easily install any
 of the nearly 20,000 packages in the collection.  The
 [auto-pkgsrc-setup](https://github.com/outpaddling/auto-admin/blob/master/auto-pkgsrc-setup.md)
-basic setup.
+script will guide you through a basic setup in minutes.
 
 First bootstrap pkgsrc using auto-pkgsrc-setup or any other method.
 Running auto-pkgsrc-setup should take about 10 minutes given default

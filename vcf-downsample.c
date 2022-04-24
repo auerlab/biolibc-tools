@@ -18,10 +18,6 @@
 #include <time.h>
 #include <biolibc/vcf.h>
 
-#define VCF_INFO_MAX    1024*1024
-#define VCF_FORMAT_MAX  1024*1024
-#define VCF_SAMPLE_MAX  1024*1024
-
 void    usage(char *argv[]);
 
 int     main(int argc,char *argv[])
@@ -50,9 +46,9 @@ int     main(int argc,char *argv[])
 	    usage(argv);
     }
     
-    bl_vcf_init(&site, VCF_INFO_MAX, VCF_FORMAT_MAX, VCF_SAMPLE_MAX);
+    bl_vcf_init(&site);
     
-    if ( bl_vcf_skip_meta_data(stdin, &tmp_stream) != BL_READ_OK )
+    if ( (tmp_stream = bl_vcf_skip_header(stdin)) == NULL )
     {
 	fprintf(stderr, "vcf-downsample: Error reading VCF header.\n");
 	return EX_NOINPUT;

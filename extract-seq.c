@@ -164,7 +164,7 @@ int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
 			  FILE *gff_stream, const char *description)
 
 {
-    int     status;
+    int     status, index;
     char    *parent_feature_type,
 	    *parent_feature_id;
 
@@ -176,11 +176,13 @@ int     print_subfeatures(bl_fasta_t *fasta_rec, bl_gff_t *feature,
     // Read everything to next feature of the same type, i.e. all subfeatures
     // of a gene or transcript
     status = bl_gff_read(feature, gff_stream, BL_GFF_FIELD_ALL);
+    index = 1;
     while ( (status == BL_READ_OK) &&
-	    (strcmp(BL_GFF_FEATURE_PARENT(feature), parent_feature_id) == 0) )
+	    (strcmp(BL_GFF_FEATURE_PARENT(feature), parent_feature_id) == 0) &&
+	    (strcmp(BL_GFF_TYPE(feature), "###") != 0) )
     {
-	printf(">%s:%s %s %" PRId64 " %" PRId64 " %s %s\n",
-		description, BL_GFF_TYPE(feature),
+	printf(">%s:%s:%u %s %" PRId64 " %" PRId64 " %s %s\n",
+		description, BL_GFF_TYPE(feature), index++,
 		BL_GFF_SEQID(feature),
 		BL_GFF_START(feature),
 		BL_GFF_END(feature),

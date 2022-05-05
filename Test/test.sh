@@ -81,3 +81,4 @@ printf "\n===\nTesting vcf-downsample...\n"
 ../vcf-downsample 50 < test.vcf > temp.vcf
 wc -l test.vcf temp.vcf
 more temp.vcf
+rm -i temp.vcf

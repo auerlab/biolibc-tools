@@ -59,6 +59,7 @@ int     main(int argc,char *argv[])
 	putc(ch, stdout);
     
     // Copy header line
+    // FIXME: This is actually copying the first call
     while ( ((ch = getc(stdin)) != '\n') && (ch != EOF) )
 	putc(ch, stdout);
     putc('\n', stdout);

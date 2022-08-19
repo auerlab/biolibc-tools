@@ -43,10 +43,9 @@ mkdir -p $PREFIX/libexec $PREFIX/lib
 LIBDIR=$(realpath $PREFIX/lib)
 LDFLAGS="-L. -L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
 LIBEXECDIR=$(realpath $PREFIX/libexec)
-export PREFIX LOCALBASE LIBEXECDIR LDFLAGS
-
 if [ $(uname) = SunOS ]; then
     LDFLAGS="$LDFLAGS -lresolv  -lsocket   -lnsl"
 fi
+export PREFIX LOCALBASE LIBEXECDIR LDFLAGS
 make clean
 make install

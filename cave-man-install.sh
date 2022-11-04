@@ -39,10 +39,10 @@ case $(uname) in
 
 esac
 
-mkdir -p $PREFIX/libexec $PREFIX/lib
+mkdir -p $PREFIX/libexec/biolibc-tools $PREFIX/lib
 LIBDIR=$(realpath $PREFIX/lib)
 LDFLAGS="-L. -L$LIBDIR -Wl,-rpath,$LIBDIR:/usr/lib:/lib"
-LIBEXECDIR=$(realpath $PREFIX/libexec)
+LIBEXECDIR=$(realpath $PREFIX/libexec/biolibc-tools)
 export PREFIX LOCALBASE LIBEXECDIR LDFLAGS
 make clean
 make install

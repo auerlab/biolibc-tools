@@ -25,7 +25,7 @@ int     main(int argc,char *argv[])
 {
     int     col, num, ch;
     char    *end, *field, arabic[10],
-	    *roman[] = { "I", "II", "III", "IV", "V", "VI", "VII", "VII",
+	    *roman[] = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII",
 			 "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI",
 			 "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII",
 			 "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX",

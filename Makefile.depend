@@ -4,6 +4,9 @@ blt.o: blt.c
 chrom-lens.o: chrom-lens.c
 	${CC} -c ${CFLAGS} chrom-lens.c
 
+deromanize.o: deromanize.c
+	${CC} -c ${CFLAGS} deromanize.c
+
 ensemblid2gene.o: ensemblid2gene.c
 	${CC} -c ${CFLAGS} ensemblid2gene.c
 

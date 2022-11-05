@@ -1,0 +1,38 @@
+.TH blt\ deromanize 1
+
+\" Convention:
+\" Underline anything that is typed verbatim - commands, etc.
+.SH SYNOPSIS
+.PP
+.nf 
+.na
+blt deromanize column < input-file > output-file
+.ad
+.fi
+
+.SH DESCRIPTION
+
+It was once a common practice to represent chromosome numbers as Roman
+numerals.  This is no longer common, but files containing Roman numerals
+still exist.
+.B blt deromanize
+converts a column of Roman numerals to the Arabic system.  Data not
+recognized as a Roman numeral is left unchanged.
+
+.SH EXAMPLES
+.nf
+.na
+blt deromanize 1 < roman.gff3 > arabic.gff3
+zcat roman.gff3.gz | blt deromanize 1 | gzip > arabic.gff3.gz
+samtools view roman.bam | blt deromanize 3 | samtools view -b > arabic.bam
+.ad
+.fi
+
+.SH SEE ALSO
+
+blt(1)
+
+.SH AUTHOR
+.nf
+.na
+J. Bacon

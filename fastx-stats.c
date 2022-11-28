@@ -57,7 +57,7 @@ int     fastx_stats(char *filename)
     FILE            *fastx_stream;
     char            *p;
     int             status;
-    double          mean_len, sum_sq;
+    double          mean_len, sum_sq, variance;
 
     if ( strcmp(filename, "-") == 0 )
 	fastx_stream = stdin;
@@ -70,11 +70,13 @@ int     fastx_stats(char *filename)
 
     memset(counts, 0, 26 * sizeof(*counts));
     bl_fastx_init(&rec, fastx_stream);
+    sum_sq = 0.0;
     while ( (status = bl_fastx_read(&rec, fastx_stream)) == BL_READ_OK )
     {
 	++records;
 	len = bl_fastx_seq_len(&rec);
 	bases += len;
+	sum_sq += len * len;
 	if ( len > max_len )
 	    max_len = len;
 	if ( len < min_len )
@@ -82,6 +84,7 @@ int     fastx_stats(char *filename)
 	for (p = bl_fastx_seq(&rec); *p != '\0'; ++p)
 	    ++counts[tolower(*p) - 'a'];
     }
+
     if ( fastx_stream != stdin )
 	xt_fclose(fastx_stream);
     bl_fastx_free(&rec);
@@ -91,22 +94,16 @@ int     fastx_stats(char *filename)
 	fprintf(stderr, "Error reading file: %s\n", strerror(errno));
 	return EX_DATAERR;
     }
-
+    
     mean_len = (double)bases / records;
-    rewind(fastx_stream);
-    sum_sq = 0.0;
-    while ( (status = bl_fastx_read(&rec, fastx_stream)) == BL_READ_OK )
-    {
-	++records;
-	len = bl_fastx_seq_len(&rec);
-	sum_sq += (len - mean_len) * (len - mean_len);
-    }
+    // Single-pass variance
+    variance = sum_sq / records - mean_len * mean_len;
     
     printf("\nFilename:           %s\n", filename);
     printf("Sequences:          %lu\n", records);
     printf("Bases:              %lu\n", bases);
     printf("Mean-length:        %0.2f\n", mean_len);
-    printf("Standard-deviation: %0.2f\n", sqrt(sum_sq / records));
+    printf("Standard-deviation: %0.2f\n", sqrt(variance));
     printf("Min-length:         %lu\n", min_len);
     printf("Max-length:         %lu\n", max_len);
     printf("A:                  %lu (%0.2f%%)\n", counts['a' - 'a'],

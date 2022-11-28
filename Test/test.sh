@@ -13,6 +13,10 @@ cd ..
 cd Test
 export PATH=..:$PATH
 
+../fastx-stats test.fastq
+../fastx-stats test.fasta
+pause
+
 printf "\n===\nTesting fastx2tsv and fastq-derep.sh...\n"
 ../Scripts/fastq-derep.sh test.fastq > temp.fastq
 if diff correct-uniq.fastq temp.fastq; then

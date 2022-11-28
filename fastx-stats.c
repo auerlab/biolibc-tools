@@ -14,6 +14,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <ctype.h>
+#include <math.h>
 #include <xtend/string.h>
 #include <xtend/file.h>
 #include <biolibc/fastx.h>
@@ -56,6 +57,7 @@ int     fastx_stats(char *filename)
     FILE            *fastx_stream;
     char            *p;
     int             status;
+    double          mean_len, sum_sq;
 
     if ( strcmp(filename, "-") == 0 )
 	fastx_stream = stdin;
@@ -89,24 +91,35 @@ int     fastx_stats(char *filename)
 	fprintf(stderr, "Error reading file: %s\n", strerror(errno));
 	return EX_DATAERR;
     }
+
+    mean_len = (double)bases / records;
+    rewind(fastx_stream);
+    sum_sq = 0.0;
+    while ( (status = bl_fastx_read(&rec, fastx_stream)) == BL_READ_OK )
+    {
+	++records;
+	len = bl_fastx_seq_len(&rec);
+	sum_sq += (len - mean_len) * (len - mean_len);
+    }
     
-    printf("\nFilename:   %s\n", filename);
-    printf("Sequences:  %lu\n", records);
-    printf("Bases:      %lu\n", bases);
-    printf("Avg length: %lu\n", bases / records);
-    printf("Min length: %lu\n", min_len);
-    printf("Max length: %lu\n", max_len);
-    printf("A:          %lu (%lu%%)\n", counts['a' - 'a'],
-	    counts['a' - 'a'] * 100UL / bases);
-    printf("C:          %lu (%lu%%)\n", counts['c' - 'a'],
-	    counts['c' - 'a'] * 100UL / bases);
-    printf("G:          %lu (%lu%%)\n", counts['g' - 'a'],
-	    counts['g' - 'a'] * 100UL / bases);
-    printf("T:          %lu (%lu%%)\n", counts['t' - 'a'],
-	    counts['t' - 'a'] * 100UL / bases);
-    printf("N:          %lu (%lu%%)\n", counts['n' - 'a'],
-	    counts['n' - 'a'] * 100UL / bases);
-    printf("GC:         %lu (%lu%%)\n", counts['g' - 'a'] + counts['c' - 'a'],
-	    (counts['g' - 'a'] + counts['c' - 'a']) * 100UL / bases);
+    printf("\nFilename:           %s\n", filename);
+    printf("Sequences:          %lu\n", records);
+    printf("Bases:              %lu\n", bases);
+    printf("Mean-length:        %0.2f\n", mean_len);
+    printf("Standard-deviation: %0.2f\n", sqrt(sum_sq / records));
+    printf("Min-length:         %lu\n", min_len);
+    printf("Max-length:         %lu\n", max_len);
+    printf("A:                  %lu (%0.2f%%)\n", counts['a' - 'a'],
+	    counts['a' - 'a'] * 100.0 / bases);
+    printf("C:                  %lu (%0.2f%%)\n", counts['c' - 'a'],
+	    counts['c' - 'a'] * 100.0 / bases);
+    printf("G:                  %lu (%0.2f%%)\n", counts['g' - 'a'],
+	    counts['g' - 'a'] * 100.0 / bases);
+    printf("T:                  %lu (%0.2f%%)\n", counts['t' - 'a'],
+	    counts['t' - 'a'] * 100.0 / bases);
+    printf("N:                  %lu (%0.2f%%)\n", counts['n' - 'a'],
+	    counts['n' - 'a'] * 100.0 / bases);
+    printf("GC:                 %lu (%0.2f%%)\n", counts['g' - 'a'] + counts['c' - 'a'],
+	    (counts['g' - 'a'] + counts['c' - 'a']) * 100.0 / bases);
     return EX_OK;
 }

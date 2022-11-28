@@ -108,7 +108,7 @@ CFLAGS      += ${INCLUDES}
 RPATH       ?= -Wl,-rpath
 LDFLAGS     += -L${PREFIX}/lib ${RPATH},${PREFIX}/lib \
 	       -L${LOCALBASE}/lib ${RPATH},${LOCALBASE}/lib \
-	       -lbiolibc -lxtend
+	       -lbiolibc -lxtend -lm
 
 ############################################################################
 # Assume first command in PATH.  Override with full pathnames if necessary.

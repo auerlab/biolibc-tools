@@ -105,7 +105,7 @@ Community support for pkgsrc is available through the
 
 ### Building biolibc-tools locally
 
-Below are cave man install instructions for development purposes, not
+Below are caveman install instructions for development purposes, not
 recommended for regular use.
 
 biolibc-tools depends on 

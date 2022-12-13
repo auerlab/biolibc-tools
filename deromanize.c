@@ -15,6 +15,7 @@
 #include <sysexits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <xtend/dsv.h>
 #include <xtend/string.h>
 
@@ -38,6 +39,14 @@ int     main(int argc,char *argv[])
     
     switch(argc)
     {
+	case 3:
+	    infile = fopen(argv[2], "r");
+	    if ( infile == NULL )
+	    {
+		fprintf(stderr, "%s: Cannot open %s: %s\n", argv[0],
+			argv[2], strerror(errno));
+		return EX_DATAERR;
+	    }
 	case 2:
 	    col = strtol(argv[1], &end, 10) - 1;
 	    if ( *end != '\0' )
@@ -64,17 +73,22 @@ int     main(int argc,char *argv[])
 	    ungetc(ch, infile);
 	    dsv_line_read(&line, infile, "\t");
 	    field = DSV_LINE_FIELDS_AE(&line, col);
-	    // FIXME: Find a more efficient approach than linear search
-	    for (num = 0; (roman[num] != NULL)
-			  && (strcmp(roman[num], field) != 0); ++num)
-		;
-	    if ( roman[num] != NULL )
+	    if ( field != NULL )
 	    {
-		snprintf(arabic, 10, "%d", num + 1);
-		free(DSV_LINE_FIELDS_AE(&line, col));
-		dsv_line_set_fields_ae(&line, col, strdup(arabic));
+		fprintf(stderr, "Translating %s...\n", field);
+		// FIXME: Find a more efficient approach than linear search
+		// Create a romantol() function like strtol()
+		for (num = 0; (roman[num] != NULL)
+			      && (strcmp(roman[num], field) != 0); ++num)
+		    ;
+		if ( roman[num] != NULL )
+		{
+		    snprintf(arabic, 10, "%d", num + 1);
+		    free(DSV_LINE_FIELDS_AE(&line, col));
+		    dsv_line_set_fields_ae(&line, col, strdup(arabic));
+		}
+		dsv_line_write(&line, outfile);
 	    }
-	    dsv_line_write(&line, outfile);
 	    dsv_line_free(&line);
 	}
     }
@@ -85,6 +99,6 @@ int     main(int argc,char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s\n", argv[0]);
+    fprintf(stderr, "Usage: %s column < input-file\n", argv[0]);
     exit(EX_USAGE);
 }

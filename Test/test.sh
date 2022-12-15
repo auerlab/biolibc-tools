@@ -86,3 +86,6 @@ printf "\n===\nTesting vcf-downsample...\n"
 wc -l test.vcf temp.vcf
 more temp.vcf
 rm -i temp.vcf
+
+printf "\n===\nTesting deromanize...\n"
+../deromanize 1 roman.gff3

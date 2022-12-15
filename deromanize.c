@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <xtend/dsv.h>
 #include <xtend/string.h>
+#include <xtend/stdlib.h>   // romantoi()
 
 void    usage(char *argv[]);
 
@@ -25,15 +26,7 @@ int     main(int argc,char *argv[])
 
 {
     int     col, num, ch;
-    char    *end, *field, arabic[10],
-	    *roman[] = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII",
-			 "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI",
-			 "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII",
-			 "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX",
-			 "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV",
-			 "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL",
-			 "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI",
-			 "XLVII", "XLVIII", "XLIX", "L", NULL };
+    char    *end, *field, arabic[10];
     FILE    *infile = stdin, *outfile = stdout;
     dsv_line_t  line;
     
@@ -68,24 +61,26 @@ int     main(int argc,char *argv[])
 	    if ( ch == '\n' )
 		putc(ch, outfile);
 	}
-	else
+	else if ( ch != EOF )
 	{
 	    ungetc(ch, infile);
 	    dsv_line_read(&line, infile, "\t");
 	    field = DSV_LINE_FIELDS_AE(&line, col);
 	    if ( field != NULL )
 	    {
-		fprintf(stderr, "Translating %s...\n", field);
-		// FIXME: Find a more efficient approach than linear search
-		// Create a romantol() function like strtol()
-		for (num = 0; (roman[num] != NULL)
-			      && (strcmp(roman[num], field) != 0); ++num)
-		    ;
-		if ( roman[num] != NULL )
+		num = romantoi(field, &end);
+		if ( *end == '\0' )
 		{
-		    snprintf(arabic, 10, "%d", num + 1);
+		    snprintf(arabic, 10, "%d", num);
 		    free(DSV_LINE_FIELDS_AE(&line, col));
 		    dsv_line_set_fields_ae(&line, col, strdup(arabic));
+		}
+		else
+		{
+		    fprintf(stderr,
+			"deromanize: Error: Field is not a Roman numeral: %s\n",
+			field);
+		    return EX_DATAERR;
 		}
 		dsv_line_write(&line, outfile);
 	    }

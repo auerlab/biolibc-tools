@@ -2,10 +2,6 @@
  *  Description:
  *      Convert Roman numerals to Arabic in specified columns
  *
- *  Arguments:
- *
- *  Returns:
- *
  *  History: 
  *  Date        Name        Modification
  *  2022-11-05  Jason Bacon Begin
@@ -20,13 +16,15 @@
 #include <xtend/string.h>
 #include <xtend/stdlib.h>   // romantoi()
 
+#define MAX_ARABIC_DIGITS   64
+
 void    usage(char *argv[]);
 
 int     main(int argc,char *argv[])
 
 {
     int     col, num, ch;
-    char    *end, *field, arabic[10];
+    char    *end, *field, arabic[MAX_ARABIC_DIGITS];
     FILE    *infile = stdin, *outfile = stdout;
     dsv_line_t  line;
     
@@ -69,18 +67,12 @@ int     main(int argc,char *argv[])
 	    if ( field != NULL )
 	    {
 		num = romantoi(field, &end);
+		// Convert Roman numerals, leave other data alone
 		if ( *end == '\0' )
 		{
-		    snprintf(arabic, 10, "%d", num);
+		    snprintf(arabic, MAX_ARABIC_DIGITS, "%d", num);
 		    free(DSV_LINE_FIELDS_AE(&line, col));
 		    dsv_line_set_fields_ae(&line, col, strdup(arabic));
-		}
-		else
-		{
-		    fprintf(stderr,
-			"deromanize: Error: Field is not a Roman numeral: %s\n",
-			field);
-		    return EX_DATAERR;
 		}
 		dsv_line_write(&line, outfile);
 	    }
@@ -94,6 +86,6 @@ int     main(int argc,char *argv[])
 void    usage(char *argv[])
 
 {
-    fprintf(stderr, "Usage: %s column < input-file\n", argv[0]);
+    fprintf(stderr, "Usage: %s column [input-file]\n", argv[0]);
     exit(EX_USAGE);
 }

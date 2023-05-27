@@ -26,7 +26,7 @@ int     main(int argc,char *argv[])
     int     col, num, ch;
     char    *end, *field, arabic[MAX_ARABIC_DIGITS];
     FILE    *infile = stdin, *outfile = stdout;
-    dsv_line_t  line;
+    dsv_line_t  *dsv_line = dsv_line_new();
     
     switch(argc)
     {
@@ -48,7 +48,7 @@ int     main(int argc,char *argv[])
 	    usage(argv);
     }
     
-    dsv_line_init(&line);
+    dsv_line_init(dsv_line);
     while ( !feof(infile) )
     {
 	if ( (ch = getc(infile)) == '#' )
@@ -62,8 +62,8 @@ int     main(int argc,char *argv[])
 	else if ( ch != EOF )
 	{
 	    ungetc(ch, infile);
-	    dsv_line_read(&line, infile, "\t");
-	    field = DSV_LINE_FIELDS_AE(&line, col);
+	    dsv_line_read(dsv_line, infile, "\t");
+	    field = dsv_line_get_fields_ae(dsv_line, col);
 	    if ( field != NULL )
 	    {
 		num = romantoi(field, &end);
@@ -71,12 +71,12 @@ int     main(int argc,char *argv[])
 		if ( *end == '\0' )
 		{
 		    snprintf(arabic, MAX_ARABIC_DIGITS, "%d", num);
-		    free(DSV_LINE_FIELDS_AE(&line, col));
-		    dsv_line_set_fields_ae(&line, col, strdup(arabic));
+		    free(dsv_line_get_fields_ae(dsv_line, col));
+		    dsv_line_set_fields_ae(dsv_line, col, strdup(arabic));
 		}
-		dsv_line_write(&line, outfile);
+		dsv_line_write(dsv_line, outfile);
 	    }
-	    dsv_line_free(&line);
+	    dsv_line_free(dsv_line);
 	}
     }
     return EX_OK;

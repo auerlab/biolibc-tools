@@ -14,7 +14,7 @@
 #include <errno.h>
 #include <xtend/dsv.h>
 #include <xtend/string.h>
-#include <xtend/stdlib.h>   // romantoi()
+#include <xtend/stdlib.h>   // xt_romantoi()
 
 #define MAX_ARABIC_DIGITS   64
 
@@ -66,7 +66,7 @@ int     main(int argc,char *argv[])
 	    field = dsv_line_get_fields_ae(dsv_line, col);
 	    if ( field != NULL )
 	    {
-		num = romantoi(field, &end);
+		num = xt_romantoi(field, &end);
 		// Convert Roman numerals, leave other data alone
 		if ( *end == '\0' )
 		{

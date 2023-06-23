@@ -27,10 +27,10 @@ case $(uname) in
 	if [ -e $pkgsrc ]; then
 	    echo "Using $pkgsrc..."
 	    LOCALBASE=$pkgsrc
-	    if ! pkg_info uthash; then
+	    if ! pkg_info uthash > /dev/null; then
 		cd ${pkgsrc%pkg}/pkgsrc/devel/uthash && sbmake install
 	    fi
-	    if ! pkg_info xxhash; then
+	    if ! pkg_info xxhash > /dev/null; then
 		cd ${pkgsrc%pkg}/pkgsrc/devel/xxhash && sbmake install
 	    fi
 	fi

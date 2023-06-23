@@ -91,6 +91,7 @@ CC          ?= cc
 CFLAGS      ?= -Wall -g -O
 CFLAGS      += -DLIBEXECDIR=\"${LIBEXECDIR}\" -DXXH_INLINE_ALL
 CFLAGS      += -DVERSION=\"`./version.sh`\"
+CFLAGS      += -Wno-char-subscripts
 
 # Link command:
 # Use ${FC} to link when mixing C and Fortran

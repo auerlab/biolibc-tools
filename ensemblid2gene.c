@@ -16,7 +16,7 @@
 #include <xtend/file.h>
 #include <xtend/mem.h>
 #include <xtend/string.h>
-#include <biolibc/gff.h>
+#include <biolibc/gff3.h>
 
 void    usage(char *argv[]);
 

@@ -21,7 +21,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdbool.h>
-#include <biolibc/gff.h>
+#include <biolibc/gff3.h>
 #include <biolibc/fasta.h>
 #include <xtend/file.h>
 

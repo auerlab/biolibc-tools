@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <sysexits.h>
 #include <stdlib.h>
-#include <biolibc/gff.h>
+#include <biolibc/gff3.h>
 
 void    usage(char *argv[]);
 

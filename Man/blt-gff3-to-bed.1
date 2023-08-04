@@ -1,4 +1,4 @@
-.TH blt\ gff2bed 1
+.TH blt\ gff3-to-bed 1
 
 \" Convention:
 \" Underline anything that is typed verbatim - commands, etc.
@@ -6,26 +6,26 @@
 .PP
 .nf 
 .na
-blt gff2bed < file.gff3 > file.bed
+blt gff3-to-bed < file.gff3 > file.bed
 .ad
 .fi
 
 .SH DESCRIPTION
 
-.B blt gff2bed
+.B blt gff3-to-bed
 converts GFF3 input to BED output.  Currently it generates 6-column BED
 output with scores set to 0.
 
 Note that GFF3 contains roughly the same information as BED and is generally
 considered a more capable format, so
-converting from GFF3 to BED is normally not desirable. blt gff2bed is
+converting from GFF3 to BED is normally not desirable. blt gff3-to-bed is
 provided as a stop-gap for working with tools that don't yet support the GTF
 or GFF3 formats.
 
 .SH EXAMPLES
 .nf
 .na
-blt gff2bed < file.gff3 > file.bed
+blt gff3-to-bed < file.gff3 > file.bed
 .ad
 .fi
 

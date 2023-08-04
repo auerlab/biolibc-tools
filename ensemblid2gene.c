@@ -23,16 +23,16 @@ void    usage(char *argv[]);
 int     main(int argc,char *argv[])
 
 {
-    char    *gff_file, *id_file;
-    FILE    *gff_stream, *id_stream;
+    char    *gff3_file, *id_file;
+    FILE    *gff3_stream, *id_stream;
     char    **id_list, *id, *p, **found;
     size_t  id_count;
-    bl_gff_t    feature;
+    bl_gff3_t    feature;
     
     switch(argc)
     {
 	case 3:
-	    gff_file = argv[1];
+	    gff3_file = argv[1];
 	    id_file = argv[2];
 	    break;
 	
@@ -49,20 +49,20 @@ int     main(int argc,char *argv[])
     id_count = xt_inhale_strings(id_stream, &id_list);
     fclose(id_stream);
     qsort(id_list, id_count, sizeof(*id_list), (int(*)(const void *,const void*))strptrcmp);
-    if ( (gff_stream = fopen(gff_file, "r")) == NULL )
+    if ( (gff3_stream = fopen(gff3_file, "r")) == NULL )
     {
 	fprintf(stderr, "ensemblid2gene: Could not open %s for read.\n",
-		gff_file);
+		gff3_file);
 	exit(EX_NOINPUT);
     }
-    bl_gff_skip_header(gff_stream);
+    bl_gff3_skip_header(gff3_stream);
     
-    bl_gff_init(&feature);
-    while ( bl_gff_read(&feature, gff_stream, BL_GFF_FIELD_ALL) == BL_READ_OK )
+    bl_gff3_init(&feature);
+    while ( bl_gff3_read(&feature, gff3_stream, BL_GFF3_FIELD_ALL) == BL_READ_OK )
     {
-	//printf("%s ", BL_GFF_FEATURE_NAME(&feature));
+	//printf("%s ", BL_GFF3_FEATURE_NAME(&feature));
 	//fflush(stdout);
-	id = BL_GFF_FEATURE_ID(&feature);
+	id = BL_GFF3_FEATURE_ID(&feature);
 	if ( id != NULL )
 	{
 	    // GFF ID format is  ID=feature-type:feature-id
@@ -79,14 +79,14 @@ int     main(int argc,char *argv[])
 	    // Print feature name without trailing -###
 	    if ( found != NULL )
 	    {
-		p = BL_GFF_FEATURE_NAME(&feature);
+		p = BL_GFF3_FEATURE_NAME(&feature);
 		printf("%s\t%s\n", *found, strsep(&p, "-"));
 		if ( p != NULL )
 		    p[-1] = '-';
 	    }
 	}
     }
-    fclose(gff_stream);
+    fclose(gff3_stream);
 
     xt_free_strings(id_list);
     return EX_OK;

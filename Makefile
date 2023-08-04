@@ -52,7 +52,7 @@
 BIN     = blt
 
 # Add fastx-diff when finished
-BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff2bed \
+BINS    = fastx2tsv fastx-derep vcf-search fasta2seq find-orfs gff3-to-bed \
 	  extract-seq chrom-lens fastx-stats ensemblid2gene vcf-downsample \
 	  deromanize
 
@@ -155,8 +155,8 @@ fasta2seq: fasta2seq.o
 find-orfs: find-orfs.o
 	${LD} -o find-orfs find-orfs.o ${LDFLAGS}
 
-gff2bed: gff2bed.o
-	${LD} -o gff2bed gff2bed.o ${LDFLAGS}
+gff3-to-bed: gff3-to-bed.o
+	${LD} -o gff3-to-bed gff3-to-bed.o ${LDFLAGS}
 
 extract-seq: extract-seq.o
 	${LD} -o extract-seq extract-seq.o ${LDFLAGS}

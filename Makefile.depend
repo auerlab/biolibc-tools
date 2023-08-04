@@ -31,8 +31,8 @@ fastx2tsv.o: fastx2tsv.c
 find-orfs.o: find-orfs.c
 	${CC} -c ${CFLAGS} find-orfs.c
 
-gff2bed.o: gff2bed.c
-	${CC} -c ${CFLAGS} gff2bed.c
+gff3-to-bed.o: gff3-to-bed.c
+	${CC} -c ${CFLAGS} gff3-to-bed.c
 
 vcf-downsample.o: vcf-downsample.c
 	${CC} -c ${CFLAGS} vcf-downsample.c

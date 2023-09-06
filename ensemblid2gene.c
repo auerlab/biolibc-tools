@@ -48,7 +48,7 @@ int     main(int argc,char *argv[])
     }
     id_count = xt_inhale_strings(id_stream, &id_list);
     fclose(id_stream);
-    qsort(id_list, id_count, sizeof(*id_list), (int(*)(const void *,const void*))strptrcmp);
+    qsort(id_list, id_count, sizeof(*id_list), (int(*)(const void *,const void*))xt_strptrcmp);
     if ( (gff3_stream = fopen(gff3_file, "r")) == NULL )
     {
 	fprintf(stderr, "ensemblid2gene: Could not open %s for read.\n",
@@ -74,7 +74,7 @@ int     main(int argc,char *argv[])
 	    // Name= should then contain the gene name, assuming this ID
 	    // is for a transcript or gene as it should be
 	    found = bsearch(&id, id_list, id_count, sizeof(*id_list),
-		    (int (*)(const void *, const void *))strptrcasecmp);
+		    (int (*)(const void *, const void *))xt_strptrcasecmp);
 	    
 	    // Print feature name without trailing -###
 	    if ( found != NULL )

@@ -39,7 +39,7 @@ int     main(int argc, char *argv[])
     while ( bl_fastx_read(&rec, stdin) != BL_READ_EOF )
     {
 	// Replace TABs in description to avoid interpretation as separators
-	strtr(bl_fastx_desc(&rec), "\t", " ", 0);
+	xt_strtr(bl_fastx_desc(&rec), "\t", " ", 0);
 	switch(BL_FASTX_FORMAT(&rec))
 	{
 	    case    BL_FASTX_FORMAT_FASTA:

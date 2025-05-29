@@ -4,7 +4,7 @@
 #
 #   Perform a cave-man install for development and testing purposes.
 #   For production use, this software should be installed via a package
-#   manager such as Debian packages, FreeBSD ports, MacPorts, pkgsrc, etc.
+#   manager such as Debian packages, FreeBSD ports, MacPorts, dreckly, etc.
 #       
 #   History:
 #   Date        Name        Modification
@@ -23,15 +23,15 @@ case $(uname) in
     if [ -z "$CFLAGS" ]; then
 	export CFLAGS="-Wall -g -O"
     fi
-    for pkgsrc in /usr/pkg /opt/pkg ~/Pkgsrc/pkg; do
-	if [ -e $pkgsrc ]; then
-	    echo "Using $pkgsrc..."
-	    LOCALBASE=$pkgsrc
+    for dreckly in /usr/pkg /opt/pkg ~/Dreckly/pkg; do
+	if [ -e $dreckly ]; then
+	    echo "Using $dreckly..."
+	    LOCALBASE=$dreckly
 	    if ! pkg_info uthash > /dev/null; then
-		cd ${pkgsrc%pkg}/pkgsrc/devel/uthash && sbmake install
+		cd ${dreckly%pkg}/dreckly/devel/uthash && sbmake install
 	    fi
 	    if ! pkg_info xxhash > /dev/null; then
-		cd ${pkgsrc%pkg}/pkgsrc/devel/xxhash && sbmake install
+		cd ${dreckly%pkg}/dreckly/devel/xxhash && sbmake install
 	    fi
 	fi
     done
